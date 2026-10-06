@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Skill4Future</title>
+<style>
+  :root{
+    --primary:#164782;
+    --primary-bright:#2874d4;
+    --accent:#6aaeff;
+    --bg:#0d1117;
+    --bg-soft:#0f1520;
+    --surface:#111827;
+    --surface-2:#1a2438;
+    --border:rgba(22,71,130,0.35);
+    --border-strong:rgba(40,116,212,0.5);
+    --text:#e8edf5;
+    --text-muted:#8a9bb5;
+    --text-faint:#526078;
+    --hub:#eaf2ff;
+    --c-versicherung:#3d7dc9;
+    --c-versicherung-a:#1a3a6e;
+    --c-versicherung-b:#164782;
+    --c-vorsorge:#2874d4;
+    --c-vorsorge-a:#164782;
+    --c-vorsorge-b:#2874d4;
+    --c-investition:#6aaeff;
+    --c-investition-a:#2874d4;
+    --c-investition-b:#6aaeff;
+    --shadow:0 20px 60px rgba(0,0,0,0.55);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    min-height:100vh;
+  }
+  h1,h2,h3{text-wrap:balance; margin:0;}
+  a{color:inherit;}
+  button{font-family:inherit; cursor:pointer;}
+  p{margin:0;}
+
+  .app{min-height:100vh; display:flex; flex-direction:column;}
+
+  .topbar{
+    display:flex; align-items:center; justify-content:space-between; gap:16px;
+    padding:18px clamp(16px,4vw,40px);
+    border-bottom:1px solid var(--border);
+    background:var(--bg-soft);
+    position:sticky; top:0; z-index:20;
+    flex-wrap:wrap;
+  }
+  .brand{display:flex; align-items:center; gap:16px; min-width:0;}
+  .logo{font-size:22px; font-weight:800; color:#fff; cursor:pointer; flex-shrink:0; background:none; border:none; padding:0;}
+  .logo span{color:var(--accent);}
+  .crumbs{display:flex; align-items:center; gap:6px; font-size:13px; color:var(--text-muted); min-width:0; overflow:hidden;}
+  .crumbs button{background:none; border:none; color:var(--text-muted); font-size:13px; padding:2px 4px; border-radius:6px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .crumbs button:hover{color:#fff;}
+  .crumbs .sep{color:var(--text-faint);}
+  .crumbs .current{color:#fff; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+
+  .edit-toggle{
+    display:flex; align-items:center; gap:8px;
+    background:var(--surface); border:1px solid var(--border-strong); color:var(--text);
+    padding:9px 16px; border-radius:25px; font-size:13px; font-weight:600;
+    transition:background .2s, color .2s;
+  }
+  .edit-toggle:hover:not(:disabled){background:var(--primary);}
+  .edit-toggle.active{background:var(--primary-bright); border-color:var(--primary-bright); color:#fff;}
+  .edit-toggle:disabled{opacity:.4; cursor:not-allowed;}
+
+  #view{flex:1; transform-origin: var(--tx,50%) var(--ty,50%); transition:transform .3s cubic-bezier(.2,.8,.2,1), opacity .3s ease;}
+  #view.out{transform:scale(1.16); opacity:0;}
+  #view.in-start{transform:scale(.86); opacity:0;}
+
+  /* ---------- HOME / NETWORK ---------- */
+  .home-wrap{display:flex; flex-direction:column; align-items:center; justify-content:center; padding:clamp(20px,5vw,56px) 20px; gap:16px; min-height:calc(100vh - 70px);}
+  .home-intro{text-align:center; max-width:520px; margin-bottom:6px;}
+  .home-intro .eyebrow{display:block; font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); margin-bottom:8px; font-weight:700;}
+  .home-intro h1{font-size:clamp(26px,4vw,38px); font-weight:800; color:#fff; margin-bottom:10px;}
+  .home-intro p{color:var(--text-muted); font-size:15px; line-height:1.6;}
+  .stage{width:min(90vw, 64vh, 620px); aspect-ratio:1/1; perspective:1400px;}
+  .stage-inner{position:relative; width:100%; height:100%; transform-style:preserve-3d; transition:transform .25s ease-out;}
+  #linesSvg{position:absolute; inset:0; width:100%; height:100%; overflow:visible;}
+  #netLayer{position:absolute; inset:0;}
+  .net-node{
+    position:absolute; top:0; left:0; transform:translate(-50%,-50%);
+    display:flex; flex-direction:column; align-items:center; gap:8px;
+    background:none; border:none; padding:0; color:var(--text);
+  }
+  .net-node .dot{border-radius:50%; background:var(--surface); border:2px solid var(--cat); transition:transform .2s ease, box-shadow .2s ease;}
+  .net-node:hover .dot, .net-node:focus-visible .dot{transform:scale(1.1); box-shadow:0 0 26px var(--cat);}
+  .net-node .lbl{font-size:13px; font-weight:700; color:#fff; white-space:nowrap;}
+  .net-node.cn-center{cursor:default;}
+  .net-node.cn-center .dot{width:clamp(64px,10vw,92px); height:clamp(64px,10vw,92px); background:linear-gradient(135deg, var(--cat-a,var(--cat)), var(--cat-b,var(--cat))); border-color:var(--cat);}
+  .net-node.cn-center.is-root .dot{background:radial-gradient(circle at 35% 30%, #fff, var(--accent) 70%); border-color:var(--accent); box-shadow:0 0 30px rgba(106,174,255,.45);}
+  .net-node.cn-center .lbl{font-size:clamp(14px,1.8vw,17px);}
+  .net-node.cn-sat .dot{width:clamp(46px,6.6vw,64px); height:clamp(46px,6.6vw,64px); background:linear-gradient(135deg, var(--cat-a), var(--cat-b));}
+  .hint{font-family:inherit; font-size:12.5px; color:var(--text-faint); text-align:center; min-height:1em;}
+  .home-top{width:100%; max-width:560px; margin:0 auto;}
+
+  /* ---------- PAGE (branch / leaf) ---------- */
+  .page{max-width:1100px; margin:0 auto; padding:clamp(24px,5vw,48px) clamp(16px,4vw,40px) 80px;}
+  .page-hero{border-radius:20px; padding:clamp(24px,4vw,44px); margin-bottom:36px; position:relative; overflow:hidden; border:1px solid var(--border);}
+  .page-hero .chip{
+    display:inline-flex; align-items:center; gap:6px; font-size:11px; letter-spacing:.1em; text-transform:uppercase;
+    font-weight:700; padding:6px 14px; border-radius:20px; border:1px solid var(--cat); color:var(--cat); margin-bottom:16px;
+  }
+  .page-hero h1{font-size:clamp(26px,4vw,40px); font-weight:800; color:#fff; margin-bottom:14px;}
+  .page-hero .icon-badge{font-size:clamp(30px,4vw,44px); margin-bottom:12px; display:block;}
+  .page-hero p.desc{font-size:15.5px; line-height:1.75; color:#cbd3e6; max-width:70ch; white-space:pre-wrap;}
+
+  .video-wrap{position:relative; width:100%; max-width:640px; padding-top:36%; margin-top:22px; border-radius:12px; overflow:hidden; border:1px solid var(--border);}
+  .video-wrap iframe{position:absolute; inset:0; width:100%; height:100%; border:0;}
+  .video-link{display:inline-flex; align-items:center; gap:6px; font-size:13.5px; font-weight:600; color:#fff; background:var(--surface-2); border:1px solid var(--border-strong); padding:10px 16px; border-radius:8px; margin-top:18px; text-decoration:none;}
+
+  .section-label{font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:var(--text-faint); font-weight:700; margin:0 0 16px;}
+
+  .links-list{display:flex; flex-direction:column; gap:8px; margin-bottom:28px; max-width:640px;}
+  .link-row{display:flex; align-items:center; justify-content:space-between; gap:10px; background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:12px 16px; text-decoration:none; font-size:14px; transition:border-color .2s;}
+  .link-row:hover{border-color:var(--border-strong);}
+
+  .rel-chips{display:flex; flex-wrap:wrap; gap:10px; margin-bottom:28px;}
+  .rel-chip{display:flex; align-items:center; gap:6px; font-size:13px; background:var(--surface); border:1px solid var(--border); border-radius:20px; padding:8px 14px;}
+  .rel-chip.nav:hover{border-color:var(--border-strong); background:var(--surface-2);}
+  .rel-chip button.rm{background:none; border:none; color:var(--text-faint); font-size:15px; line-height:1;}
+  .rel-chip button.rm:hover{color:#fff;}
+
+  .topic-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(240px,1fr)); gap:20px;}
+  .topic-card{
+    text-align:left; background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:24px;
+    position:relative; overflow:hidden; transition:transform .2s, box-shadow .2s, border-color .2s, background .2s;
+  }
+  .topic-card::before{content:''; position:absolute; top:0; left:0; right:0; height:4px; background:linear-gradient(90deg, var(--cat-a), var(--cat-b));}
+  .topic-card:hover{transform:translateY(-6px); box-shadow:0 16px 34px rgba(0,0,0,.4); border-color:var(--border-strong); background:var(--surface-2);}
+  .topic-card .ic{font-size:30px; margin-bottom:12px; display:block;}
+  .topic-card h3{font-size:16.5px; font-weight:700; color:#fff; margin-bottom:8px;}
+  .topic-card .snip{font-size:13px; color:var(--text-muted); line-height:1.55; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;}
+  .topic-card .go{position:absolute; bottom:18px; right:18px; font-size:16px; color:var(--cat); opacity:0; transform:translateX(-4px); transition:opacity .2s, transform .2s;}
+  .topic-card:hover .go{opacity:1; transform:translateX(0);}
+  .topic-card.add-card{border-style:dashed; display:flex; flex-direction:column; align-items:flex-start; justify-content:center; color:var(--text-muted); min-height:120px;}
+  .topic-card.add-card:hover{border-color:var(--border-strong); color:#fff;}
+
+  .back-btn{
+    display:inline-flex; align-items:center; gap:6px; background:var(--surface); border:1px solid var(--border);
+    color:var(--text-muted); padding:9px 18px; border-radius:20px; font-size:13.5px; margin-bottom:20px;
+  }
+  .back-btn:hover{color:#fff; border-color:var(--border-strong);}
+
+  /* ---------- EDIT FORM ---------- */
+  .edit-box{background:var(--surface); border:1px solid var(--border-strong); border-radius:16px; padding:24px; margin-bottom:32px;}
+  .field{margin-bottom:16px;}
+  .field label{display:block; font-size:11.5px; letter-spacing:.06em; text-transform:uppercase; color:var(--text-faint); margin-bottom:6px; font-weight:700;}
+  .field input[type=text], .field input[type=url], .field textarea, .field select{
+    width:100%; background:var(--bg-soft); border:1px solid var(--border-strong); color:var(--text);
+    padding:11px 13px; border-radius:8px; font-size:14px; font-family:inherit; resize:vertical;
+  }
+  .field input:focus, .field textarea:focus, .field select:focus{outline:2px solid var(--primary-bright); outline-offset:1px;}
+  .row-inline{display:flex; gap:8px; align-items:center;}
+  .row-inline input{flex:1;}
+  .icon-btn{background:var(--bg-soft); border:1px solid var(--border-strong); color:var(--text-muted); width:36px; height:36px; border-radius:8px; flex-shrink:0; font-size:16px;}
+  .icon-btn:hover{color:#fff;}
+  .btn{padding:11px 20px; border-radius:8px; font-size:13.5px; font-weight:700; border:1px solid transparent;}
+  .btn-primary{background:var(--primary-bright); color:#fff;}
+  .btn-primary:hover{background:var(--primary);}
+  .btn-ghost{background:transparent; border-color:var(--border-strong); color:var(--text-muted);}
+  .btn-ghost:hover{color:#fff;}
+  .btn-danger{background:transparent; border-color:rgba(220,80,80,.4); color:#e88;}
+  .btn-danger:hover:not(:disabled){background:rgba(220,80,80,.12);}
+  .btn-danger:disabled{opacity:.35; cursor:not-allowed;}
+  .btn-row{display:flex; gap:10px; margin-top:18px; flex-wrap:wrap;}
+  .small-add{display:flex; gap:8px; margin-top:8px; max-width:420px;}
+  .small-add input{flex:1;}
+  .note{font-size:12px; color:var(--text-faint); line-height:1.6; margin-top:6px;}
+  .divider{height:1px; background:var(--border); margin:26px 0;}
+  .edit-banner{font-size:12.5px; color:var(--accent); background:rgba(40,116,212,.12); border:1px solid var(--border-strong); border-radius:10px; padding:10px 16px; margin-bottom:24px;}
+
+  @media (prefers-reduced-motion: reduce){
+    #view, .stage-inner, .topic-card, .net-node .dot{transition:none;}
+  }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <header class="topbar">
+    <div class="brand">
+      <button class="logo" id="logoBtn" type="button">Skill<span>4</span>Future</button>
+      <nav class="crumbs" id="crumbs"></nav>
+    </div>
+    <button class="edit-toggle" id="editToggle" type="button">✎ Bearbeiten</button>
+  </header>
+  <div id="view"></div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var ROOT_ID = "hub";
+  var CATS = {
+    hub:          { label:"Skill4Future", solid:"var(--hub)" },
+    versicherung: { label:"Versicherung", solid:"var(--c-versicherung)", a:"var(--c-versicherung-a)", b:"var(--c-versicherung-b)" },
+    vorsorge:     { label:"Vorsorge",     solid:"var(--c-vorsorge)",     a:"var(--c-vorsorge-a)",     b:"var(--c-vorsorge-b)" },
+    investition:  { label:"Investition",  solid:"var(--c-investition)", a:"var(--c-investition-a)",  b:"var(--c-investition-b)" }
+  };
+
+  var INITIAL_NODES = [
+    { id:"hub", label:"Skill4Future", short:"Skill4Future", icon:"🧭", category:"hub", parent:null, order:0,
+      description:"Dein persönliches Wissensnetz für Versicherung, Vorsorge und Investition in der Schweiz. Wähle einen Bereich und öffne die Themen, die für dein Leben relevant sind.",
+      videoUrl:"", links:[], relatedIds:[] },
+
+    { id:"versicherung", label:"Versicherung", short:"Versicherung", icon:"🛡️", category:"versicherung", parent:"hub", order:0,
+      description:"Versicherungen schützen dich vor den finanziellen Folgen von Unfällen, Krankheit oder Schäden. In der Schweiz sind einige obligatorisch (Krankenkasse, Unfallversicherung), andere freiwillig, aber sinnvoll (Haftpflicht, Hausrat).",
+      videoUrl:"", links:[], relatedIds:[] },
+    { id:"vorsorge", label:"Vorsorge", short:"Vorsorge", icon:"🏛️", category:"vorsorge", parent:"hub", order:1,
+      description:"Die Altersvorsorge in der Schweiz ruht auf drei Säulen: staatliche AHV, berufliche Pensionskasse und private Vorsorge. Je früher du das System verstehst, desto gezielter kannst du Lücken schliessen.",
+      videoUrl:"", links:[], relatedIds:[] },
+    { id:"investition", label:"Investition", short:"Investition", icon:"📈", category:"investition", parent:"hub", order:2,
+      description:"Investieren lässt dein Geld für dich arbeiten, statt nur auf dem Sparkonto zu liegen. Wichtig sind Anlagehorizont, Risikofähigkeit und Streuung – nicht das schnelle Geld.",
+      videoUrl:"", links:[], relatedIds:[] },
+
+    { id:"kvg-grundversicherung", label:"Krankenkasse (KVG) – Grundversicherung", short:"Krankenkasse", icon:"🏥", category:"versicherung", parent:"versicherung", order:0,
+      description:"Die Grundversicherung nach KVG ist für alle Personen mit Wohnsitz in der Schweiz obligatorisch. Du wählst die Franchise selbst (mind. CHF 300, bis CHF 2500) – je höher die Franchise, desto tiefer die Prämie, aber desto mehr zahlst du im Krankheitsfall zuerst selbst. Mit Modellen wie Hausarzt, HMO oder Telmed sparst du zusätzlich Prämie.",
+      videoUrl:"", links:[], relatedIds:["zusatzversicherung"] },
+    { id:"zusatzversicherung", label:"Zusatzversicherung", short:"Zusatzvers.", icon:"➕", category:"versicherung", parent:"versicherung", order:1,
+      description:"Freiwillige Zusatzversicherungen (VVG) decken, was die Grundversicherung nicht übernimmt – z. B. Zahnbehandlungen, Halbprivat/Privat im Spital oder alternative Medizin. Anders als bei der Grundversicherung kann dich ein Anbieter hier ablehnen, deshalb lohnt sich der Abschluss oft schon jung und gesund.",
+      videoUrl:"", links:[], relatedIds:["kvg-grundversicherung"] },
+    { id:"haftpflicht", label:"Privathaftpflichtversicherung", short:"Haftpflicht", icon:"🤝", category:"versicherung", parent:"versicherung", order:2,
+      description:"Die Privathaftpflicht zahlt, wenn du versehentlich jemand anderem einen Schaden zufügst – die zerbrochene Brille eines Freundes, der umgekippte Kaffee auf dem Laptop der WG. Nicht gesetzlich vorgeschrieben, aber eine der günstigsten und wichtigsten Versicherungen überhaupt.",
+      videoUrl:"", links:[], relatedIds:[] },
+    { id:"hausrat", label:"Hausratversicherung", short:"Hausrat", icon:"🏠", category:"versicherung", parent:"versicherung", order:3,
+      description:"Die Hausratversicherung schützt deine persönlichen Gegenstände – vom Laptop bis zur Kleidung – gegen Feuer, Wasserschaden, Einbruchdiebstahl und Naturereignisse. In einer WG lohnt sich die Frage, ob eine gemeinsame Police oder eigene Verträge sinnvoller sind.",
+      videoUrl:"", links:[], relatedIds:[] },
+    { id:"unfall-uvg", label:"Unfallversicherung (UVG/NBU)", short:"Unfall (UVG)", icon:"🚑", category:"versicherung", parent:"versicherung", order:4,
+      description:"Wer mindestens 8 Stunden pro Woche angestellt ist, ist automatisch über den Arbeitgeber gegen Berufsunfälle (BU) und Nichtberufsunfälle (NBU) versichert. Arbeitest du weniger oder gar nicht, brauchst du die Unfalldeckung zusätzlich über deine Krankenkasse.",
+      videoUrl:"", links:[], relatedIds:["saeule1"] },
+    { id:"rechtsschutz", label:"Rechtsschutzversicherung", short:"Rechtsschutz", icon:"⚖️", category:"versicherung", parent:"versicherung", order:5,
+      description:"Eine Rechtsschutzversicherung übernimmt Anwalts- und Gerichtskosten bei einem Rechtsstreit – etwa mit Vermieter, Arbeitgeber oder nach einem Verkehrsunfall. Besonders für Mietende und Autofahrende ein häufig unterschätzter Baustein.",
+      videoUrl:"", links:[], relatedIds:[] },
+    { id:"reise", label:"Reiseversicherung", short:"Reise", icon:"✈️", category:"versicherung", parent:"versicherung", order:6,
+      description:"Reiseversicherungen decken Annullierungskosten, medizinische Notfälle im Ausland oder verpasste Anschlüsse. Die Krankenkasse deckt im Ausland oft nur einen Bruchteil der Kosten – bei Reisen ausserhalb Europas ist eine zusätzliche Auslanddeckung empfehlenswert.",
+      videoUrl:"", links:[], relatedIds:[] },
+    { id:"motorfahrzeug", label:"Motorfahrzeugversicherung", short:"Motorfahrzeug", icon:"🚗", category:"versicherung", parent:"versicherung", order:7,
+      description:"Für Auto, Töff oder E-Scooter ist die Haftpflichtdeckung gesetzlich vorgeschrieben – sie zahlt für Schäden, die du anderen zufügst. Eine Kaskoversicherung (Teil- oder Vollkasko) ist freiwillig und schützt dein eigenes Fahrzeug.",
+      videoUrl:"", links:[], relatedIds:[] },
+
+    { id:"saeule1", label:"Säule 1 – AHV/IV", short:"Säule 1 – AHV", icon:"🏛️", category:"vorsorge", parent:"vorsorge", order:0,
+      description:"Die AHV ist die staatliche Basis der Vorsorge und läuft im Umlageverfahren: Die arbeitende Generation finanziert direkt die Renten der heutigen Rentner:innen. Ab dem 1. Januar nach dem 17. Geburtstag zahlst du Beiträge – lückenlose Beitragsjahre sichern dir später die volle Rente.",
+      videoUrl:"", links:[], relatedIds:["unfall-uvg"] },
+    { id:"saeule2", label:"Säule 2 – Pensionskasse (BVG)", short:"Säule 2 – PK", icon:"💼", category:"vorsorge", parent:"vorsorge", order:1,
+      description:"Ab einem bestimmten Jahreslohn (Koordinationsabzug beachten) bist du über den Arbeitgeber in der beruflichen Vorsorge (BVG) versichert. Arbeitgeber und Arbeitnehmer zahlen gemeinsam ein – das angesparte Kapital siehst du jährlich auf deinem Vorsorgeausweis.",
+      videoUrl:"", links:[], relatedIds:["vorsorgeausweis"] },
+    { id:"saeule3a", label:"Säule 3a – gebundene Vorsorge", short:"Säule 3a", icon:"🔒", category:"vorsorge", parent:"vorsorge", order:2,
+      description:"In die Säule 3a kannst du jährlich einen begrenzten Betrag einzahlen und dabei Steuern sparen (Selbstständige ohne PK dürfen mehr). Das Geld ist bis 5 Jahre vor der ordentlichen Pensionierung gebunden – ausser bei Wohneigentum, Selbstständigkeit oder Wegzug aus der Schweiz.",
+      videoUrl:"", links:[], relatedIds:["etf"] },
+    { id:"saeule3b", label:"Säule 3b – freie Vorsorge", short:"Säule 3b", icon:"🏦", category:"vorsorge", parent:"vorsorge", order:3,
+      description:"Die Säule 3b umfasst freies Sparen und Anlegen ohne steuerliche Vorzugsbehandlung wie bei der 3a, dafür jederzeit verfügbar. Klassisch dazu gehören Sparkonten, Wertschriften oder freiwillige Lebensversicherungen.",
+      videoUrl:"", links:[], relatedIds:[] },
+    { id:"vorsorgeluecke", label:"Vorsorgelücken erkennen", short:"Vorsorgelücken", icon:"🔍", category:"vorsorge", parent:"vorsorge", order:4,
+      description:"Teilzeitarbeit, Erwerbsunterbrüche oder Selbstständigkeit führen oft zu Lücken in der 2. Säule. Ein Blick auf deinen Pensionskassenausweis und einen AHV-Auszug (kostenlos bei der Ausgleichskasse bestellbar) zeigt früh, wo du nachbessern solltest.",
+      videoUrl:"", links:[], relatedIds:["risikoprofil","sparkonto"] },
+    { id:"vorsorgeausweis", label:"Vorsorgeausweis lesen", short:"Vorsorgeausweis", icon:"📄", category:"vorsorge", parent:"vorsorge", order:5,
+      description:"Der jährliche Vorsorgeausweis deiner Pensionskasse zeigt dein angespartes Alterskapital, den Umwandlungssatz und die Leistungen bei Invalidität oder Tod. Wer ihn versteht, erkennt frühzeitig, ob die Rente später zum Leben reichen wird.",
+      videoUrl:"", links:[], relatedIds:["saeule2"] },
+
+    { id:"sparkonto", label:"Sparkonto & Notgroschen", short:"Sparkonto", icon:"💰", category:"investition", parent:"investition", order:0,
+      description:"Bevor du investierst, gehört ein Notgroschen von 2–3 Monatslöhnen auf ein griffbereites Sparkonto. Er federt unerwartete Ausgaben ab, ohne dass du Anlagen zum ungünstigen Zeitpunkt verkaufen musst.",
+      videoUrl:"", links:[], relatedIds:["vorsorgeluecke"] },
+    { id:"etf", label:"ETFs & Fonds", short:"ETFs & Fonds", icon:"📈", category:"investition", parent:"investition", order:1,
+      description:"ETFs (Exchange Traded Funds) bilden einen ganzen Markt wie den Swiss Market Index oder den MSCI World nach und streuen dein Risiko automatisch über viele Firmen. Sie gelten als kostengünstiger Einstieg ins langfristige Investieren.",
+      videoUrl:"", links:[], relatedIds:["saeule3a"] },
+    { id:"aktien", label:"Aktien", short:"Aktien", icon:"📊", category:"investition", parent:"investition", order:2,
+      description:"Mit einer Aktie kaufst du einen kleinen Anteil an einem Unternehmen und profitierst von Kursgewinnen und Dividenden – trägst aber auch das volle unternehmerische Risiko dieser einzelnen Firma. Einzelaktien eignen sich eher als Ergänzung, nicht als alleinige Strategie.",
+      videoUrl:"", links:[], relatedIds:[] },
+    { id:"obligationen", label:"Obligationen", short:"Obligationen", icon:"📜", category:"investition", parent:"investition", order:3,
+      description:"Mit einer Obligation leihst du einem Staat oder Unternehmen Geld gegen einen festen Zins. Sie gelten als risikoärmer als Aktien und dienen oft dazu, ein Portfolio zu stabilisieren.",
+      videoUrl:"", links:[], relatedIds:[] },
+    { id:"immobilien", label:"Immobilien", short:"Immobilien", icon:"🏘️", category:"investition", parent:"investition", order:4,
+      description:"Wohneigentum oder indirekte Immobilienanlagen (Immobilienfonds) gehören für viele Schweizer:innen zur Altersvorsorge. Wichtig beim Eigenheim: die Tragbarkeitsrechnung der Bank und der mögliche Einsatz von Vorsorgegeldern aus Säule 2 oder 3a.",
+      videoUrl:"", links:[], relatedIds:[] },
+    { id:"krypto", label:"Kryptowährungen", short:"Krypto", icon:"🪙", category:"investition", parent:"investition", order:5,
+      description:"Kryptowährungen wie Bitcoin oder Ethereum sind hochvolatil und unterliegen keiner Einlagensicherung. Wer investiert, sollte nur Geld einsetzen, dessen Verlust er verkraften kann, und Krypto höchstens als kleinen Baustein im Portfolio sehen.",
+      videoUrl:"", links:[], relatedIds:[] },
+    { id:"risikoprofil", label:"Risikoprofil & Anlagestrategie", short:"Risikoprofil", icon:"🎯", category:"investition", parent:"investition", order:6,
+      description:"Dein Risikoprofil ergibt sich aus Anlagehorizont, finanzieller Situation und persönlicher Risikobereitschaft. Eine passende Strategie – etwa die Aufteilung zwischen Aktien und Obligationen – hilft dir, auch in turbulenten Marktphasen nicht überstürzt zu verkaufen.",
+      videoUrl:"", links:[], relatedIds:["vorsorgeluecke"] },
+    { id:"zinseszins", label:"Zinseszins-Effekt", short:"Zinseszins", icon:"🔁", category:"investition", parent:"investition", order:7,
+      description:"Zinseszins bedeutet, dass du nicht nur auf dein Ausgangskapital, sondern auch auf bereits erhaltene Erträge weitere Erträge erhältst. Wer früh mit dem Investieren beginnt, profitiert überproportional – Zeit ist beim Vermögensaufbau oft wichtiger als der eingesetzte Betrag.",
+      videoUrl:"", links:[], relatedIds:[] }
+  ];
+
+  // ---------- state ----------
+  var nodesMap = new Map();
+  var dbCol = null;
+  var dbAvailable = false;
+  var currentId = ROOT_ID;
+  var editMode = false;
+  var linksDraft = [];
+  var reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  INITIAL_NODES.forEach(function(n){ nodesMap.set(n.id, n); });
+
+  var view = document.getElementById("view");
+  var crumbsEl = document.getElementById("crumbs");
+  var editToggle = document.getElementById("editToggle");
+  var logoBtn = document.getElementById("logoBtn");
+
+  function escapeHtml(s){
+    return String(s==null?"":s).replace(/[&<>"']/g, function(c){
+      return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];
+    });
+  }
+  function slugify(s){
+    return s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"")
+      .replace(/[^a-z0-9]+/g,"-").replace(/(^-|-$)/g,"") || "thema";
+  }
+  function children(id){
+    var out = [];
+    nodesMap.forEach(function(n){ if(n.parent === id) out.push(n); });
+    out.sort(function(a,b){ return (a.order||0)-(b.order||0) || a.id.localeCompare(b.id); });
+    return out;
+  }
+  function ancestors(id){
+    var chain = [];
+    var cur = nodesMap.get(id);
+    while(cur){ chain.unshift(cur); cur = cur.parent ? nodesMap.get(cur.parent) : null; }
+    return chain;
+  }
+  function catInfo(node){ return CATS[node.category] || CATS.hub; }
+
+  // ---------- navigation ----------
+  function navigateTo(id, originEl){
+    if(!nodesMap.has(id)) return;
+    var originX = "50%", originY = "50%";
+    if(originEl){
+      var r = originEl.getBoundingClientRect();
+      var vr = view.getBoundingClientRect();
+      originX = ((r.left + r.width/2 - vr.left) / vr.width * 100) + "%";
+      originY = ((r.top + r.height/2 - vr.top) / vr.height * 100) + "%";
+    }
+    view.style.setProperty("--tx", originX);
+    view.style.setProperty("--ty", originY);
+
+    function swap(){
+      currentId = id;
+      history.pushState({ id:id }, "", "#" + id);
+      renderView();
+    }
+
+    if(reduceMotion){ swap(); return; }
+    view.classList.add("out");
+    setTimeout(function(){
+      swap();
+      view.classList.remove("out");
+      view.classList.add("in-start");
+      requestAnimationFrame(function(){
+        requestAnimationFrame(function(){ view.classList.remove("in-start"); });
+      });
+    }, 240);
+  }
+
+  window.addEventListener("popstate", function(e){
+    var id = (e.state && e.state.id) || ROOT_ID;
+    if(nodesMap.has(id)) currentId = id;
+    renderView();
+  });
+
+  logoBtn.addEventListener("click", function(){ navigateTo(ROOT_ID, logoBtn); });
+
+  // ---------- breadcrumbs ----------
+  function renderCrumbs(){
+    var chain = ancestors(currentId);
+    crumbsEl.innerHTML = "";
+    if(chain.length <= 1){ return; }
+    chain.forEach(function(n, i){
+      if(i > 0){
+        var sep = document.createElement("span");
+        sep.className = "sep"; sep.textContent = "/";
+        crumbsEl.appendChild(sep);
+      }
+      if(i === chain.length - 1){
+        var cur = document.createElement("span");
+        cur.className = "current"; cur.textContent = n.short || n.label;
+        crumbsEl.appendChild(cur);
+      } else {
+        var b = document.createElement("button");
+        b.type = "button"; b.textContent = n.short || n.label;
+        b.addEventListener("click", function(){ navigateTo(n.id, b); });
+        crumbsEl.appendChild(b);
+      }
+    });
+  }
+
+  // ---------- edit toggle ----------
+  editToggle.addEventListener("click", function(){
+    if(!dbAvailable) return;
+    editMode = !editMode;
+    editToggle.classList.toggle("active", editMode);
+    renderView();
+  });
+
+  function toEmbedUrl(url){
+    if(!url) return null;
+    try{
+      var u = new URL(url);
+      if(u.hostname.indexOf("youtu.be") !== -1) return "https://www.youtube.com/embed/" + u.pathname.slice(1);
+      if(u.hostname.indexOf("youtube.com") !== -1){
+        var id = u.searchParams.get("v");
+        if(id) return "https://www.youtube.com/embed/" + id;
+        if(u.pathname.indexOf("/embed/") === 0) return url;
+      }
+    }catch(e){}
+    return null;
+  }
+
+  // ---------- render dispatch ----------
+  function renderView(){
+    renderCrumbs();
+    var n = nodesMap.get(currentId);
+    var isHub = currentId === ROOT_ID;
+    var isBranch = n.parent === ROOT_ID;
+    var kids = children(currentId);
+    var canDelete = !isHub && !isBranch && kids.length === 0;
+    if(editMode){ renderEditPage(n, isHub, isBranch, canDelete); return; }
+    if(kids.length){ renderNetworkView(n, kids); }
+    else { renderContentPage(n); }
+  }
+
+  function backButtonHtml(){
+    return currentId === ROOT_ID ? "" : '<div class="home-top"><button type="button" class="back-btn" id="backBtn">← Zurück</button></div>';
+  }
+  function wireBackButton(n){
+    var b = document.getElementById("backBtn");
+    if(b) b.addEventListener("click", function(){ navigateTo(n.parent || ROOT_ID, b); });
+  }
+
+  // ---------- NETWORK VIEW (hub or any node with children) ----------
+  function renderNetworkView(center, sats){
+    var isRoot = center.id === ROOT_ID;
+    var eyebrow = isRoot ? "Kompetenzen fürs Leben" : (center.parent === ROOT_ID ? "Bereich" : catInfo(center).label);
+    var svgns = "http://www.w3.org/2000/svg";
+
+    view.innerHTML =
+      '<div class="home-wrap">'+
+        backButtonHtml()+
+        '<div class="home-intro">'+
+          '<span class="eyebrow">'+escapeHtml(eyebrow)+'</span>'+
+          '<h1>'+escapeHtml(center.icon?center.icon+" ":"")+escapeHtml(center.label)+'</h1>'+
+          '<p>'+escapeHtml(center.description||"")+'</p>'+
+        '</div>'+
+        '<div class="stage" id="stage">'+
+          '<div class="stage-inner" id="stageInner">'+
+            '<svg id="linesSvg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet"></svg>'+
+            '<div id="netLayer"></div>'+
+          '</div>'+
+        '</div>'+
+        '<p class="hint">'+(sats.length? "Klicke auf einen Punkt, um einzutauchen." : "")+'</p>'+
+      '</div>';
+
+    wireBackButton(center);
+
+    var svg = document.getElementById("linesSvg");
+    var layer = document.getElementById("netLayer");
+    var pos = {};
+    pos[center.id] = { x:50, y:50 };
+    sats.forEach(function(s,i){
+      var angle = i * (360/sats.length);
+      var rad = angle * Math.PI/180;
+      pos[s.id] = { x: 50 + 34*Math.sin(rad), y: 50 - 34*Math.cos(rad) };
+    });
+
+    sats.forEach(function(s){
+      var sc = catInfo(s);
+      var line = document.createElementNS(svgns,"path");
+      line.setAttribute("d","M 50 50 L "+pos[s.id].x+" "+pos[s.id].y);
+      line.setAttribute("stroke", sc.solid);
+      line.setAttribute("stroke-width","0.4");
+      line.setAttribute("opacity","0.5");
+      svg.appendChild(line);
+    });
+
+    var cc = catInfo(center);
+    var centerEl = document.createElement("div");
+    centerEl.className = "net-node cn-center" + (isRoot ? " is-root" : "");
+    centerEl.style.left = "50%"; centerEl.style.top = "50%";
+    centerEl.style.setProperty("--cat", cc.solid);
+    if(cc.a){ centerEl.style.setProperty("--cat-a", cc.a); centerEl.style.setProperty("--cat-b", cc.b); }
+    centerEl.innerHTML = '<span class="dot"></span><span class="lbl">'+escapeHtml(center.icon||"")+' '+escapeHtml(center.short||center.label)+'</span>';
+    layer.appendChild(centerEl);
+
+    sats.forEach(function(s){
+      var c = catInfo(s);
+      var btn = document.createElement("button");
+      btn.type = "button"; btn.className = "net-node cn-sat";
+      btn.style.left = pos[s.id].x+"%"; btn.style.top = pos[s.id].y+"%";
+      btn.style.setProperty("--cat", c.solid);
+      btn.style.setProperty("--cat-a", c.a);
+      btn.style.setProperty("--cat-b", c.b);
+      btn.innerHTML = '<span class="dot"></span><span class="lbl">'+escapeHtml(s.icon||"")+' '+escapeHtml(s.short||s.label)+'</span>';
+      btn.addEventListener("click", function(){ navigateTo(s.id, btn); });
+      layer.appendChild(btn);
+    });
+
+    if(!reduceMotion){
+      var stage = document.getElementById("stage");
+      var inner = document.getElementById("stageInner");
+      stage.addEventListener("mousemove", function(e){
+        var r = stage.getBoundingClientRect();
+        var px = (e.clientX - r.left) / r.width - 0.5;
+        var py = (e.clientY - r.top) / r.height - 0.5;
+        inner.style.transform = "rotateY("+(px*10)+"deg) rotateX("+(-py*10)+"deg)";
+      });
+      stage.addEventListener("mouseleave", function(){ inner.style.transform = "rotateY(0) rotateX(0)"; });
+    }
+  }
+
+  // ---------- CONTENT PAGE (topic with no sub-topics) ----------
+  function renderContentPage(n){
+    var c = catInfo(n);
+    var html = '<div class="page">';
+    html += '<button type="button" class="back-btn" id="backBtn">← Zurück</button>';
+    html += '<div class="page-hero" style="background:linear-gradient(135deg, rgba(22,71,130,.16), rgba(13,17,23,0));">';
+    html += '<span class="icon-badge">'+escapeHtml(n.icon||"")+'</span>';
+    html += '<div class="chip" style="--cat:'+c.solid+'; border-color:'+c.solid+'; color:'+c.solid+'">'+escapeHtml(c.label)+'</div>';
+    html += '<h1>'+escapeHtml(n.label)+'</h1>';
+    html += '<p class="desc">'+escapeHtml(n.description||"")+'</p>';
+    var embed = toEmbedUrl(n.videoUrl);
+    if(embed){
+      html += '<div class="video-wrap"><iframe src="'+embed+'" title="Video zu '+escapeHtml(n.label)+'" allowfullscreen loading="lazy"></iframe></div>';
+    } else if(n.videoUrl){
+      html += '<a class="video-link" href="'+escapeHtml(n.videoUrl)+'" target="_blank" rel="noopener">▶ Video ansehen ↗</a>';
+    }
+    html += '</div>';
+
+    if(n.links && n.links.length){
+      html += '<div class="section-label">Links</div><div class="links-list">';
+      n.links.forEach(function(l){
+        html += '<a class="link-row" href="'+escapeHtml(l.url)+'" target="_blank" rel="noopener"><span>'+escapeHtml(l.title||l.url)+'</span><span>↗</span></a>';
+      });
+      html += '</div>';
+    }
+
+    if(n.relatedIds && n.relatedIds.length){
+      html += '<div class="section-label">Verknüpfte Themen</div><div class="rel-chips">';
+      n.relatedIds.forEach(function(rid){
+        var rn = nodesMap.get(rid);
+        if(!rn) return;
+        html += '<button type="button" class="rel-chip nav" data-nav="'+rid+'">'+escapeHtml(rn.icon||"")+' '+escapeHtml(rn.short||rn.label)+'</button>';
+      });
+      html += '</div>';
+    }
+
+    html += '</div>';
+    view.innerHTML = html;
+    wireBackButton(n);
+    view.querySelectorAll("[data-nav]").forEach(function(el){
+      el.addEventListener("click", function(){ navigateTo(el.getAttribute("data-nav"), el); });
+    });
+  }
+
+  // ---------- EDIT PAGE ----------
+  function renderEditPage(n, isHub, isBranch, canDelete){
+    var c = catInfo(n);
+    linksDraft = (n.links||[]).map(function(l){ return {title:l.title, url:l.url}; });
+    var html = '<div class="page">';
+    html += '<button type="button" class="back-btn" id="backBtn">← Zurück</button>';
+    html += '<div class="edit-banner">Bearbeitungsmodus aktiv — Änderungen werden für alle mit diesem Link gespeichert.</div>';
+    html += renderEditBox(n, c, isHub, isBranch, canDelete);
+    html += '</div>';
+    view.innerHTML = html;
+    wireBackButton(n);
+    wireEditBox(n, isHub, isBranch, canDelete);
+  }
+
+  function renderEditBox(n, c, isHub, isBranch, canDelete){
+    var canAddChild = !isHub; // branches and leaves may gain sub-topics; the 3 pillars under the hub stay fixed
+    var eh = '<div class="edit-box">';
+    eh += '<div class="chip" style="--cat:'+c.solid+'; border-color:'+c.solid+'; color:'+c.solid+'">'+escapeHtml(catInfo(n).label)+'</div>';
+    eh += '<div class="field"><label>Titel</label><input type="text" id="fLabel" value="'+escapeHtml(n.label)+'"></div>';
+    eh += '<div class="field"><label>Kurzbezeichnung</label><input type="text" id="fShort" value="'+escapeHtml(n.short||n.label)+'"></div>';
+    eh += '<div class="field"><label>Icon (Emoji)</label><input type="text" id="fIcon" value="'+escapeHtml(n.icon||"")+'" style="max-width:100px;"></div>';
+    eh += '<div class="field"><label>Beschreibung</label><textarea id="fDesc" rows="6">'+escapeHtml(n.description||"")+'</textarea></div>';
+    eh += '<div class="field"><label>Video-URL (z. B. YouTube)</label><input type="url" id="fVideo" placeholder="https://youtube.com/watch?v=..." value="'+escapeHtml(n.videoUrl||"")+'"></div>';
+
+    eh += '<div class="section-label">Links</div><div class="links-list" id="linksEditList"></div>';
+    eh += '<button class="btn btn-ghost" id="addLinkBtn" type="button" style="margin-bottom:6px;">+ Link hinzufügen</button>';
+
+    eh += '<div class="btn-row"><button class="btn btn-primary" id="saveBtn" type="button">Speichern</button>';
+    eh += '<button class="btn btn-ghost" id="cancelBtn" type="button">Abbrechen</button></div>';
+
+    eh += '<div class="divider"></div>';
+    eh += '<div class="section-label">Verknüpfte Themen</div><div class="rel-chips" id="relChips"></div>';
+    eh += '<div class="row-inline"><select id="relSelect"></select><button class="icon-btn" id="relAddBtn" type="button" title="Verknüpfen">↔</button></div>';
+
+    if(canAddChild){
+      eh += '<div class="divider"></div>';
+      eh += '<div class="section-label">Neues Unterthema</div>';
+      eh += '<div class="small-add"><input type="text" id="childInput" placeholder="Titel des neuen Themas"><button class="btn btn-primary" id="childAddBtn" type="button">+</button></div>';
+    }
+
+    eh += '<div class="divider"></div>';
+    eh += '<button class="btn btn-danger" id="deleteBtn" type="button" '+(canDelete?"":"disabled")+'>Thema löschen</button>';
+    if(!canDelete){
+      eh += '<p class="note">'+(isHub ? "Das Zentrum kann nicht gelöscht werden." : isBranch ? "Die drei Hauptbereiche können nicht gelöscht werden." : "Lösche zuerst alle Unterthemen dieses Punkts.")+'</p>';
+    }
+    eh += '</div>';
+    return eh;
+  }
+
+  function wireEditBox(n, isHub, isBranch, canDelete){
+    function renderLinksEditor(){
+      var wrap = document.getElementById("linksEditList");
+      wrap.innerHTML = "";
+      linksDraft.forEach(function(l, i){
+        var row = document.createElement("div");
+        row.className = "row-inline"; row.style.marginBottom = "8px";
+        row.innerHTML = '<input type="text" placeholder="Titel" value="'+escapeHtml(l.title||"")+'" data-i="'+i+'" data-f="title">'+
+                         '<input type="text" placeholder="https://..." value="'+escapeHtml(l.url||"")+'" data-i="'+i+'" data-f="url">'+
+                         '<button class="icon-btn" data-rm="'+i+'" type="button">×</button>';
+        wrap.appendChild(row);
+      });
+      wrap.querySelectorAll("input").forEach(function(inp){
+        inp.addEventListener("input", function(){ linksDraft[+inp.dataset.i][inp.dataset.f] = inp.value; });
+      });
+      wrap.querySelectorAll("[data-rm]").forEach(function(b){
+        b.addEventListener("click", function(){ linksDraft.splice(+b.dataset.rm,1); renderLinksEditor(); });
+      });
+    }
+    renderLinksEditor();
+    document.getElementById("addLinkBtn").addEventListener("click", function(){ linksDraft.push({title:"",url:""}); renderLinksEditor(); });
+
+    function renderRelChips(){
+      var wrap = document.getElementById("relChips");
+      wrap.innerHTML = "";
+      (n.relatedIds||[]).forEach(function(rid){
+        var rn = nodesMap.get(rid);
+        if(!rn) return;
+        var chip = document.createElement("span");
+        chip.className = "rel-chip";
+        chip.innerHTML = escapeHtml(rn.short||rn.label)+' <button type="button" class="rm" data-rm-rel="'+rid+'">×</button>';
+        wrap.appendChild(chip);
+      });
+      wrap.querySelectorAll("[data-rm-rel]").forEach(function(b){
+        b.addEventListener("click", function(){ removeRelation(n.id, b.dataset.rmRel); });
+      });
+      var sel = document.getElementById("relSelect");
+      sel.innerHTML = "";
+      var opts = [];
+      nodesMap.forEach(function(other){
+        if(other.id === n.id) return;
+        if((n.relatedIds||[]).indexOf(other.id) !== -1) return;
+        opts.push(other);
+      });
+      opts.sort(function(a,b){ return (a.short||a.label).localeCompare(b.short||b.label); });
+      opts.forEach(function(o){
+        var op = document.createElement("option");
+        op.value = o.id; op.textContent = o.short||o.label;
+        sel.appendChild(op);
+      });
+    }
+    renderRelChips();
+    document.getElementById("relAddBtn").addEventListener("click", function(){
+      var sel = document.getElementById("relSelect");
+      if(sel.value) addRelation(n.id, sel.value);
+    });
+
+    document.getElementById("saveBtn").addEventListener("click", function(){
+      saveMainFields(n.id, {
+        label: document.getElementById("fLabel").value.trim() || n.label,
+        short: document.getElementById("fShort").value.trim() || n.short,
+        icon: document.getElementById("fIcon").value.trim(),
+        description: document.getElementById("fDesc").value,
+        videoUrl: document.getElementById("fVideo").value.trim(),
+        links: linksDraft.filter(function(l){ return l.title || l.url; })
+      });
+    });
+    document.getElementById("cancelBtn").addEventListener("click", function(){ renderView(); });
+
+    document.getElementById("childAddBtn").addEventListener("click", function(){
+      addChild(n.id, document.getElementById("childInput").value);
+    });
+    document.getElementById("deleteBtn").addEventListener("click", function(){
+      if(!canDelete) return;
+      if(window.confirm('"'+n.label+'" wirklich löschen?')) deleteNode(n.id);
+    });
+  }
+
+  // ---------- db-backed mutations ----------
+  function saveMainFields(id, fields){
+    var n = nodesMap.get(id);
+    var updated = Object.assign({}, n, fields);
+    nodesMap.set(id, updated);
+    if(dbCol) dbCol.doc(id).set(updated).catch(function(){});
+    renderView();
+  }
+  function addRelation(aId, bId){
+    var a = nodesMap.get(aId), b = nodesMap.get(bId);
+    var aRel = Array.from(new Set((a.relatedIds||[]).concat([bId])));
+    var bRel = Array.from(new Set((b.relatedIds||[]).concat([aId])));
+    nodesMap.set(aId, Object.assign({}, a, {relatedIds:aRel}));
+    nodesMap.set(bId, Object.assign({}, b, {relatedIds:bRel}));
+    if(dbCol){
+      dbCol.doc(aId).set(nodesMap.get(aId)).catch(function(){});
+      dbCol.doc(bId).set(nodesMap.get(bId)).catch(function(){});
+    }
+    renderView();
+  }
+  function removeRelation(aId, bId){
+    var a = nodesMap.get(aId), b = nodesMap.get(bId);
+    var aRel = (a.relatedIds||[]).filter(function(x){ return x!==bId; });
+    nodesMap.set(aId, Object.assign({}, a, {relatedIds:aRel}));
+    if(dbCol) dbCol.doc(aId).set(nodesMap.get(aId)).catch(function(){});
+    if(b){
+      var bRel = (b.relatedIds||[]).filter(function(x){ return x!==aId; });
+      nodesMap.set(bId, Object.assign({}, b, {relatedIds:bRel}));
+      if(dbCol) dbCol.doc(bId).set(nodesMap.get(bId)).catch(function(){});
+    }
+    renderView();
+  }
+  function addChild(parentId, label){
+    label = (label||"").trim();
+    if(!label) return;
+    var parent = nodesMap.get(parentId);
+    var siblings = children(parentId).length;
+    var id = slugify(label) + "-" + Date.now().toString(36);
+    var category = parent.id === ROOT_ID ? id : parent.category;
+    var newNode = { id:id, label:label, short:label, icon:"✨", category: parent.id === ROOT_ID ? parent.category : parent.category,
+      parent:parentId, order:siblings, description:"", videoUrl:"", links:[], relatedIds:[] };
+    // top-level branches keep the fixed CATS keys; deeper topics inherit their parent's category
+    newNode.category = parent.category;
+    nodesMap.set(id, newNode);
+    if(dbCol) dbCol.doc(id).set(newNode).catch(function(){});
+    navigateTo(id, document.getElementById("childAddBtn"));
+  }
+  function deleteNode(id){
+    var parentId = (nodesMap.get(id) && nodesMap.get(id).parent) || ROOT_ID;
+    nodesMap.delete(id);
+    if(dbCol) dbCol.doc(id).delete().catch(function(){});
+    navigateTo(parentId, null);
+  }
+
+  // ---------- init ----------
+  history.replaceState({ id: ROOT_ID }, "", "#" + ROOT_ID);
+  renderView();
+
+  (async function initDb(){
+    if(!window.claude || !window.claude.use){ editToggle.disabled = true; editToggle.title = "Bearbeitung erfordert die veröffentlichte Seite"; return; }
+    try{
+      var db = await window.claude.use("db");
+      if(!db){ editToggle.disabled = true; editToggle.title = "Bearbeitung ist in dieser Ansicht nicht verfügbar"; return; }
+      dbCol = db.collection("nodes");
+      dbAvailable = true;
+      dbCol.onSnapshot(function(snap){
+        if(snap.empty) return;
+        var fresh = new Map();
+        snap.docs.forEach(function(d){ fresh.set(d.id, d.data()); });
+        nodesMap = fresh;
+        renderView();
+      }, function(){});
+    }catch(e){
+      editToggle.disabled = true;
+      editToggle.title = "Bearbeitung ist in dieser Ansicht nicht verfügbar";
+    }
+  })();
+})();
+</script>
+</body>
+</html>
