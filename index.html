@@ -28,6 +28,9 @@
     --c-investition:#6aaeff;
     --c-investition-a:#2874d4;
     --c-investition-b:#6aaeff;
+    --c-allokation:#3cc4e8;
+    --c-allokation-a:#0e5a8a;
+    --c-allokation-b:#3cc4e8;
     --shadow:0 20px 60px rgba(0,0,0,0.55);
   }
   *{box-sizing:border-box;}
@@ -205,12 +208,13 @@
     hub:          { label:"Skill4Future", solid:"var(--hub)" },
     versicherung: { label:"Versicherung", solid:"var(--c-versicherung)", a:"var(--c-versicherung-a)", b:"var(--c-versicherung-b)" },
     vorsorge:     { label:"Vorsorge",     solid:"var(--c-vorsorge)",     a:"var(--c-vorsorge-a)",     b:"var(--c-vorsorge-b)" },
-    investition:  { label:"Investition",  solid:"var(--c-investition)", a:"var(--c-investition-a)",  b:"var(--c-investition-b)" }
+    investition:  { label:"Investition",  solid:"var(--c-investition)", a:"var(--c-investition-a)",  b:"var(--c-investition-b)" },
+    allokation:   { label:"Vermögensallokation", solid:"var(--c-allokation)", a:"var(--c-allokation-a)", b:"var(--c-allokation-b)" }
   };
 
   var INITIAL_NODES = [
     { id:"hub", label:"Skill4Future", short:"Skill4Future", icon:"🧭", category:"hub", parent:null, order:0,
-      description:"Dein persönliches Wissensnetz für Versicherung, Vorsorge und Investition in der Schweiz. Wähle einen Bereich und öffne die Themen, die für dein Leben relevant sind.",
+      description:"Dein persönliches Wissensnetz für Versicherung, Vorsorge, Investition und Vermögensallokation in der Schweiz. Wähle einen Bereich und öffne die Themen, die für dein Leben relevant sind.",
       videoUrl:"", links:[], relatedIds:[] },
 
     { id:"versicherung", label:"Versicherung", short:"Versicherung", icon:"🛡️", category:"versicherung", parent:"hub", order:0,
@@ -222,6 +226,28 @@
     { id:"investition", label:"Investition", short:"Investition", icon:"📈", category:"investition", parent:"hub", order:2,
       description:"Investieren lässt dein Geld für dich arbeiten, statt nur auf dem Sparkonto zu liegen. Wichtig sind Anlagehorizont, Risikofähigkeit und Streuung – nicht das schnelle Geld.",
       videoUrl:"", links:[], relatedIds:[] },
+    { id:"allokation", label:"Vermögensallokation", short:"Allokation", icon:"🧩", category:"allokation", parent:"hub", order:3,
+      description:"Die Vermögensallokation legt fest, wie du dein Vermögen auf verschiedene Anlageklassen verteilst, zum Beispiel Liquidität, Obligationen, Aktien und Immobilien. Diese Aufteilung bestimmt langfristig stärker über Rendite und Schwankungen als die Wahl einzelner Titel.",
+      videoUrl:"", links:[], relatedIds:[] },
+
+    { id:"asset-allocation", label:"Was ist Asset Allocation?", short:"Asset Allocation", icon:"🥧", category:"allokation", parent:"allokation", order:0,
+      description:"Asset Allocation heisst, dein Geld bewusst auf Anlageklassen aufzuteilen, statt es auf eine einzige Anlage zu setzen. Weil sich die Klassen unterschiedlich entwickeln, gleichen sich Schwankungen teilweise aus. Zuerst legst du die Aufteilung fest, danach wählst du die passenden Produkte.",
+      videoUrl:"", links:[], relatedIds:[] },
+    { id:"anlageklassen", label:"Anlageklassen im Überblick", short:"Anlageklassen", icon:"🗂️", category:"allokation", parent:"allokation", order:1,
+      description:"Die wichtigsten Anlageklassen sind Liquidität, Obligationen, Aktien, Immobilien sowie Edelmetalle wie Gold. Jede hat ein eigenes Verhältnis von Ertragschance, Schwankung und Verfügbarkeit. Wer sie kennt, kann die Allokation an seinen Anlagehorizont anpassen.",
+      videoUrl:"", links:[], relatedIds:["etf"] },
+    { id:"diversifikation", label:"Diversifikation und Klumpenrisiken", short:"Diversifikation", icon:"🌍", category:"allokation", parent:"allokation", order:2,
+      description:"Diversifikation bedeutet, das Risiko über Anlageklassen, Länder, Branchen und Währungen zu streuen. Ein typisches Klumpenrisiko in der Schweiz ist der Heimatbias: Wer fast nur Schweizer Aktien hält, hängt von wenigen Grosskonzernen und vom Franken ab.",
+      videoUrl:"", links:[], relatedIds:[] },
+    { id:"strategien", label:"Anlagestrategien: konservativ bis dynamisch", short:"Strategien", icon:"🎚️", category:"allokation", parent:"allokation", order:3,
+      description:"Anlagestrategien unterscheiden sich vor allem im Anteil der Aktien. Eine konservative Strategie setzt auf Obligationen und Liquidität, eine dynamische auf einen hohen Aktienanteil. Welche passt, hängt von deinem Anlagehorizont und deiner Risikofähigkeit ab.",
+      videoUrl:"", links:[], relatedIds:["risikoprofil"] },
+    { id:"rebalancing", label:"Rebalancing", short:"Rebalancing", icon:"⚖️", category:"allokation", parent:"allokation", order:4,
+      description:"Durch Kursbewegungen verschiebt sich deine Aufteilung mit der Zeit. Beim Rebalancing bringst du sie auf die geplanten Anteile zurück, zum Beispiel einmal pro Jahr oder wenn eine Klasse stark abweicht. So bleibt das Risiko so, wie du es gewählt hast.",
+      videoUrl:"", links:[], relatedIds:[] },
+    { id:"gesamtvermoegen", label:"Gesamtvermögen im Blick: Vorsorge und Immobilien", short:"Gesamtvermögen", icon:"🔭", category:"allokation", parent:"allokation", order:5,
+      description:"Zur Allokation gehört dein ganzes Vermögen: Sparkonto, Wertschriften, aber auch Guthaben in der Pensionskasse, Säule 3a und Wohneigentum. Wer das Gesamtbild betrachtet, erkennt Schieflagen, etwa wenn ein Grossteil des Vermögens in der eigenen Immobilie steckt.",
+      videoUrl:"", links:[], relatedIds:["saeule3a"] },
 
     { id:"kvg-grundversicherung", label:"Krankenkasse (KVG) – Grundversicherung", short:"Krankenkasse", icon:"🏥", category:"versicherung", parent:"versicherung", order:0,
       description:"Die Grundversicherung nach KVG ist für alle Personen mit Wohnsitz in der Schweiz obligatorisch. Du wählst die Franchise selbst (mind. CHF 300, bis CHF 2500) – je höher die Franchise, desto tiefer die Prämie, aber desto mehr zahlst du im Krankheitsfall zuerst selbst. Mit Modellen wie Hausarzt, HMO oder Telmed sparst du zusätzlich Prämie.",
@@ -256,7 +282,7 @@
       videoUrl:"", links:[], relatedIds:["vorsorgeausweis"] },
     { id:"saeule3a", label:"Säule 3a – gebundene Vorsorge", short:"Säule 3a", icon:"🔒", category:"vorsorge", parent:"vorsorge", order:2,
       description:"In die Säule 3a kannst du jährlich einen begrenzten Betrag einzahlen und dabei Steuern sparen (Selbstständige ohne PK dürfen mehr). Das Geld ist bis 5 Jahre vor der ordentlichen Pensionierung gebunden – ausser bei Wohneigentum, Selbstständigkeit oder Wegzug aus der Schweiz.",
-      videoUrl:"", links:[], relatedIds:["etf"] },
+      videoUrl:"", links:[], relatedIds:["etf","gesamtvermoegen"] },
     { id:"saeule3b", label:"Säule 3b – freie Vorsorge", short:"Säule 3b", icon:"🏦", category:"vorsorge", parent:"vorsorge", order:3,
       description:"Die Säule 3b umfasst freies Sparen und Anlegen ohne steuerliche Vorzugsbehandlung wie bei der 3a, dafür jederzeit verfügbar. Klassisch dazu gehören Sparkonten, Wertschriften oder freiwillige Lebensversicherungen.",
       videoUrl:"", links:[], relatedIds:[] },
@@ -272,7 +298,7 @@
       videoUrl:"", links:[], relatedIds:["vorsorgeluecke"] },
     { id:"etf", label:"ETFs & Fonds", short:"ETFs & Fonds", icon:"📈", category:"investition", parent:"investition", order:1,
       description:"ETFs (Exchange Traded Funds) bilden einen ganzen Markt wie den Swiss Market Index oder den MSCI World nach und streuen dein Risiko automatisch über viele Firmen. Sie gelten als kostengünstiger Einstieg ins langfristige Investieren.",
-      videoUrl:"", links:[], relatedIds:["saeule3a"] },
+      videoUrl:"", links:[], relatedIds:["saeule3a","anlageklassen"] },
     { id:"aktien", label:"Aktien", short:"Aktien", icon:"📊", category:"investition", parent:"investition", order:2,
       description:"Mit einer Aktie kaufst du einen kleinen Anteil an einem Unternehmen und profitierst von Kursgewinnen und Dividenden – trägst aber auch das volle unternehmerische Risiko dieser einzelnen Firma. Einzelaktien eignen sich eher als Ergänzung, nicht als alleinige Strategie.",
       videoUrl:"", links:[], relatedIds:[] },
@@ -287,7 +313,7 @@
       videoUrl:"", links:[], relatedIds:[] },
     { id:"risikoprofil", label:"Risikoprofil & Anlagestrategie", short:"Risikoprofil", icon:"🎯", category:"investition", parent:"investition", order:6,
       description:"Dein Risikoprofil ergibt sich aus Anlagehorizont, finanzieller Situation und persönlicher Risikobereitschaft. Eine passende Strategie – etwa die Aufteilung zwischen Aktien und Obligationen – hilft dir, auch in turbulenten Marktphasen nicht überstürzt zu verkaufen.",
-      videoUrl:"", links:[], relatedIds:["vorsorgeluecke"] },
+      videoUrl:"", links:[], relatedIds:["vorsorgeluecke","strategien"] },
     { id:"zinseszins", label:"Zinseszins-Effekt", short:"Zinseszins", icon:"🔁", category:"investition", parent:"investition", order:7,
       description:"Zinseszins bedeutet, dass du nicht nur auf dein Ausgangskapital, sondern auch auf bereits erhaltene Erträge weitere Erträge erhältst. Wer früh mit dem Investieren beginnt, profitiert überproportional – Zeit ist beim Vermögensaufbau oft wichtiger als der eingesetzte Betrag.",
       videoUrl:"", links:[], relatedIds:[] }
