@@ -17,7 +17,7 @@ Website: https://jano-1010.github.io/Skill4Future/
 | `assets/site.css`, `assets/menu.js` | Gemeinsames Design (Farben, Schriften, Kopf- und Fusszeile, Burger-Menü) |
 | `assets/index.css`, `assets/index.js` | Startseite: Kreuz, Hintergrundnetz, Bereichsabschnitt |
 | `assets/page.css`, `assets/page.js` | Themenseiten: Gestaltung und abhakbare Checkliste |
-| `assets/logo.jpg` | Logo (512 px) |
+| `assets/logo-round.png`, `assets/favicon-*.png`, `assets/apple-touch-icon.png` | Rundes Logo mit transparentem Rand (Seite, Browser-Tab, Handy-Startbildschirm) |
 | `content/bereiche.json` | Die vier Bereiche und der Einleitungstext der Startseite |
 | `content/themen/*.md` | **Die Inhalte**, ein Markdown-Dokument pro Thema |
 | `content/_vorlage.html` | HTML-Vorlage der Themenseiten |
