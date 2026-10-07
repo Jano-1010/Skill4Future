@@ -51,7 +51,7 @@ p{margin:0;}
 /* Fusszeile */
 .site-footer{background:var(--s4f-blau-700);color:var(--s4f-blau-200);}
 .site-footer__in{max-width:1180px;margin:0 auto;padding:28px 32px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-size:14px;}
-.site-footer__in .fname{font-family:var(--font-heading);font-size:20px;color:#fff;text-decoration:none;}
+.site-footer__in .fname{font-family:var(--font-label);font-size:16px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;line-height:1.2;color:#fff;text-decoration:none;}
 .site-footer a{color:#fff;}
 
 @media (max-width:560px){
