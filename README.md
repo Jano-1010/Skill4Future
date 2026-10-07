@@ -11,14 +11,22 @@ Website: https://jano-1010.github.io/Skill4Future/
 
 | Pfad | Inhalt |
 | --- | --- |
-| `index.html` | Startseite mit dem Netz |
+| `index.html` | Startseite mit Kreuz, Bereichsauswahl und Themenübersicht |
 | `themen/*.html` | Erzeugte Themenseiten, nicht von Hand bearbeiten |
-| `assets/nodes.js` | Erzeugte Datenliste für das Netz, nicht von Hand bearbeiten |
-| `assets/page.css`, `assets/page.js` | Gestaltung und Checkliste der Themenseiten |
+| `assets/nodes.js` | Erzeugte Datenliste für Startseite und Themenübersicht, nicht von Hand bearbeiten |
+| `assets/site.css`, `assets/menu.js` | Gemeinsames Design (Farben, Schriften, Kopf- und Fusszeile, Burger-Menü) |
+| `assets/index.css`, `assets/index.js` | Startseite: Kreuz, Hintergrundnetz, Bereichsabschnitt |
+| `assets/page.css`, `assets/page.js` | Themenseiten: Gestaltung und abhakbare Checkliste |
+| `assets/logo.jpg` | Logo (512 px) |
 | `content/bereiche.json` | Die vier Bereiche und der Einleitungstext der Startseite |
 | `content/themen/*.md` | **Die Inhalte**, ein Markdown-Dokument pro Thema |
 | `content/_vorlage.html` | HTML-Vorlage der Themenseiten |
 | `build.ps1` | Erzeugt `themen/*.html` und `assets/nodes.js` aus `content/` |
+
+### Design
+Das Design stammt aus dem Claude-Design-Handoff (Logo-Blau `#164782`, Akzent Himmelblau `#4FA3E0`, Schriften League Spartan, Cormorant Garamond und Lora). Die Farben stehen als Variablen oben in `assets/site.css`. Himmelblau wird nie als Textfarbe auf Weiss verwendet, dafür gilt `#1F5F8F`.
+
+Die Menüpunkte im Burger-Menü (Login, Registrieren, Über uns, Kontakt, Mein Profil, Einstellungen) sind Platzhalter ohne Zielseite.
 
 ### Inhalte ändern oder ergänzen
 

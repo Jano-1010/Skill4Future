@@ -234,7 +234,7 @@ foreach ($t in $topics) {
     $rb = New-Object System.Text.StringBuilder
     foreach ($rid in $t.verwandt) {
       $r = $byId[$rid]
-      [void]$rb.Append('<a class="rel" data-b="' + $r.bereich + '" href="' + $r.id + '.html"><span class="ic">' + $r.icon + '</span><span><small>' + (Esc $bereiche[$r.bereich].short) + '</small>' + (Esc $r.kurz) + '</span></a>')
+      [void]$rb.Append('<a class="rel" href="' + $r.id + '.html"><small>' + (Esc $bereiche[$r.bereich].short) + '</small><span>' + (Esc $r.kurz) + '</span></a>')
     }
     $related = '<section class="related"><h2>Verwandte Themen</h2><div class="rel-grid">' + $rb.ToString() + '</div></section>'
   }

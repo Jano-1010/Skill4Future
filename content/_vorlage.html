@@ -2,51 +2,75 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{{TITEL}} – Skill4Future</title>
 <meta name="description" content="{{DESC}}">
-<meta name="color-scheme" content="dark">
+<link rel="icon" href="../assets/logo.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=League+Spartan:wght@600;700&family=Lora:wght@400;600&display=swap">
+<link rel="stylesheet" href="../assets/site.css">
 <link rel="stylesheet" href="../assets/page.css">
 </head>
-<body data-b="{{BEREICH}}" data-id="{{ID}}">
-<header class="topbar">
-  <div class="brand">
-    <a class="logo" href="../index.html">Skill<span>4</span>Future</a>
-    <nav class="crumbs" aria-label="Pfad">
-      <a href="../index.html">Start</a><span class="sep">/</span><a href="../index.html#{{BEREICH}}">{{BEREICH_SHORT}}</a><span class="sep">/</span><span class="current">{{KURZ}}</span>
-    </nav>
+<body data-id="{{ID}}">
+
+<header class="site-header">
+  <div class="site-header__in">
+    <a class="brand" href="../index.html">
+      <img src="../assets/logo.jpg" alt="" width="44" height="44">
+      <span>Skill4Future</span>
+    </a>
+    <div class="menu-wrap">
+      <button class="burger" id="menuBtn" type="button" aria-label="Menü" aria-expanded="false" aria-controls="menuPanel"><i></i><i></i><i></i></button>
+      <div class="menu" id="menuPanel" hidden>
+        <a class="m-login" href="#">Login</a>
+        <a class="m-reg" href="#">Registrieren</a>
+        <a class="m-link" href="#">Über uns</a>
+        <a class="m-link" href="#">Kontakt</a>
+        <a class="m-link" href="#">Mein Profil</a>
+        <a class="m-link" href="#">Einstellungen</a>
+      </div>
+    </div>
   </div>
 </header>
 
-<main class="wrap">
-  <article>
-    <div class="hero">
-      <span class="icon" aria-hidden="true">{{ICON}}</span>
-      <a class="chip" href="../index.html#{{BEREICH}}">{{BEREICH_LABEL}}</a>
+<main>
+  <div class="topic-hero">
+    <div class="topic-hero__in">
+      <nav class="crumbs" aria-label="Pfad">
+        <a href="../index.html">Start</a><span aria-hidden="true">/</span><a href="../index.html#{{BEREICH}}">{{BEREICH_SHORT}}</a><span aria-hidden="true">/</span><span class="current">{{KURZ}}</span>
+      </nav>
+      <a class="badge" href="../index.html#{{BEREICH}}">{{BEREICH_LABEL}}</a>
       <h1>{{TITEL_RAW}}</h1>
       <div class="lead">{{LEAD}}</div>
       <p class="meta">Lesezeit ca. {{MIN}} Min. · Stand {{STAND}}</p>
     </div>
+  </div>
 
-    <div class="layout">
-      <div class="content">
+  <div class="topic-body">
+    <div class="topic-body__in">
+      <article class="content">
         {{VIDEO}}
         {{SECTIONS}}
         {{RELATED}}
         <nav class="pn-wrap" aria-label="Weitere Themen in diesem Bereich">{{PREV}}{{NEXT}}</nav>
-      </div>
+      </article>
       <aside class="toc" aria-label="Inhalt dieser Seite">
         <p>Auf dieser Seite</p>
         <ol>{{TOC}}</ol>
       </aside>
     </div>
-  </article>
+  </div>
 </main>
 
-<footer class="foot">
-  <p>Allgemeine Information, keine Anlage-, Steuer- oder Rechtsberatung. Zahlen und Regeln ändern sich, massgebend sind die verlinkten Quellen. Stand: {{STAND}}.</p>
-  <p><a href="../index.html">Skill4Future</a> · Kompetenzen fürs Leben</p>
+<footer class="site-footer">
+  <div class="site-footer__in">
+    <a class="fname" href="../index.html">Skill4Future</a>
+    <span>Allgemeine Information, keine Anlage-, Steuer- oder Rechtsberatung. Stand: {{STAND}}.</span>
+  </div>
 </footer>
+
+<script src="../assets/menu.js"></script>
 <script src="../assets/page.js"></script>
 </body>
 </html>

@@ -2,35 +2,55 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Krankenkasse (KVG) – Grundversicherung – Skill4Future</title>
 <meta name="description" content="Die Grundversicherung nach KVG ist für alle Personen mit Wohnsitz in der Schweiz obligatorisch. Die Leistungen sind bei allen Krankenkassen gleich, unte...">
-<meta name="color-scheme" content="dark">
+<link rel="icon" href="../assets/logo.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=League+Spartan:wght@600;700&family=Lora:wght@400;600&display=swap">
+<link rel="stylesheet" href="../assets/site.css">
 <link rel="stylesheet" href="../assets/page.css">
 </head>
-<body data-b="versicherung" data-id="kvg-grundversicherung">
-<header class="topbar">
-  <div class="brand">
-    <a class="logo" href="../index.html">Skill<span>4</span>Future</a>
-    <nav class="crumbs" aria-label="Pfad">
-      <a href="../index.html">Start</a><span class="sep">/</span><a href="../index.html#versicherung">Versicherung</a><span class="sep">/</span><span class="current">Krankenkasse</span>
-    </nav>
+<body data-id="kvg-grundversicherung">
+
+<header class="site-header">
+  <div class="site-header__in">
+    <a class="brand" href="../index.html">
+      <img src="../assets/logo.jpg" alt="" width="44" height="44">
+      <span>Skill4Future</span>
+    </a>
+    <div class="menu-wrap">
+      <button class="burger" id="menuBtn" type="button" aria-label="Menü" aria-expanded="false" aria-controls="menuPanel"><i></i><i></i><i></i></button>
+      <div class="menu" id="menuPanel" hidden>
+        <a class="m-login" href="#">Login</a>
+        <a class="m-reg" href="#">Registrieren</a>
+        <a class="m-link" href="#">Über uns</a>
+        <a class="m-link" href="#">Kontakt</a>
+        <a class="m-link" href="#">Mein Profil</a>
+        <a class="m-link" href="#">Einstellungen</a>
+      </div>
+    </div>
   </div>
 </header>
 
-<main class="wrap">
-  <article>
-    <div class="hero">
-      <span class="icon" aria-hidden="true">🏥</span>
-      <a class="chip" href="../index.html#versicherung">Versicherung</a>
+<main>
+  <div class="topic-hero">
+    <div class="topic-hero__in">
+      <nav class="crumbs" aria-label="Pfad">
+        <a href="../index.html">Start</a><span aria-hidden="true">/</span><a href="../index.html#versicherung">Versicherung</a><span aria-hidden="true">/</span><span class="current">Krankenkasse</span>
+      </nav>
+      <a class="badge" href="../index.html#versicherung">Versicherung</a>
       <h1>Krankenkasse (KVG) – Grundversicherung</h1>
       <div class="lead"><p>Die Grundversicherung nach KVG ist für alle Personen mit Wohnsitz in der Schweiz obligatorisch. Die Leistungen sind bei allen Krankenkassen gleich, unterschiedlich sind nur Prämie, Franchise und Versicherungsmodell. Genau dort lässt sich Geld sparen.</p>
 </div>
       <p class="meta">Lesezeit ca. 4 Min. · Stand Oktober 2026</p>
     </div>
+  </div>
 
-    <div class="layout">
-      <div class="content">
+  <div class="topic-body">
+    <div class="topic-body__in">
+      <article class="content">
         
         <section class="sec glance" id="auf-einen-blick"><h2>Auf einen Blick</h2>
 <ul><li>Wer in der Schweiz wohnt, muss sich innert drei Monaten versichern. Die Kasse muss dich in der Grundversicherung aufnehmen.</li><li>Du beteiligst dich an den Kosten: <strong>Franchise</strong> (ordentlich CHF 300, wählbar bis CHF 2'500), <strong>10 % Selbstbehalt</strong> bis höchstens CHF 700 pro Jahr und <strong>CHF 15 pro Spitaltag</strong>.</li><li>Wechseln kannst du per 1. Januar. Die Kündigung muss bis <strong>30. November</strong> bei der Kasse eingetroffen sein.</li></ul>
@@ -58,21 +78,25 @@
 <ul><li><a class="ext" href="https://www.bag.admin.ch/de/krankenversicherung-kostenbeteiligung-fuer-in-der-schweiz-wohnhafte-versicherte" target="_blank" rel="noopener noreferrer">Bundesamt für Gesundheit: Kostenbeteiligung für in der Schweiz wohnhafte Versicherte</a></li><li><a class="ext" href="https://www.bag.admin.ch/de/krankenversicherung-praemien-und-kostenbeteiligung" target="_blank" rel="noopener noreferrer">Bundesamt für Gesundheit: Prämien und Kostenbeteiligung</a></li><li><a class="ext" href="https://www.priminfo.admin.ch/" target="_blank" rel="noopener noreferrer">Offizieller Prämienrechner des Bundes (priminfo.admin.ch)</a></li><li><a class="ext" href="https://www.fedlex.admin.ch/eli/cc/1995/1328_1328_1328/de" target="_blank" rel="noopener noreferrer">Krankenversicherungsgesetz (KVG) auf Fedlex</a></li></ul>
 </section>
 
-        <section class="related"><h2>Verwandte Themen</h2><div class="rel-grid"><a class="rel" data-b="versicherung" href="zusatzversicherung.html"><span class="ic">➕</span><span><small>Versicherung</small>Zusatzvers.</span></a><a class="rel" data-b="versicherung" href="unfall-uvg.html"><span class="ic">🚑</span><span><small>Versicherung</small>Unfall (UVG)</span></a></div></section>
+        <section class="related"><h2>Verwandte Themen</h2><div class="rel-grid"><a class="rel" href="zusatzversicherung.html"><small>Versicherung</small><span>Zusatzvers.</span></a><a class="rel" href="unfall-uvg.html"><small>Versicherung</small><span>Unfall (UVG)</span></a></div></section>
         <nav class="pn-wrap" aria-label="Weitere Themen in diesem Bereich"><span></span><a class="pn next" href="zusatzversicherung.html"><small>Weiter</small>Zusatzvers.</a></nav>
-      </div>
+      </article>
       <aside class="toc" aria-label="Inhalt dieser Seite">
         <p>Auf dieser Seite</p>
         <ol><li><a href="#auf-einen-blick">Auf einen Blick</a></li><li><a href="#so-funktioniert-s">So funktioniert's</a></li><li><a href="#beispiel-was-zahlst-du-bei-welcher-franchise">Beispiel: Was zahlst du bei welcher Franchise?</a></li><li><a href="#haeufige-fehler">Häufige Fehler</a></li><li><a href="#checkliste">Checkliste</a></li><li><a href="#quellen">Quellen</a></li></ol>
       </aside>
     </div>
-  </article>
+  </div>
 </main>
 
-<footer class="foot">
-  <p>Allgemeine Information, keine Anlage-, Steuer- oder Rechtsberatung. Zahlen und Regeln ändern sich, massgebend sind die verlinkten Quellen. Stand: Oktober 2026.</p>
-  <p><a href="../index.html">Skill4Future</a> · Kompetenzen fürs Leben</p>
+<footer class="site-footer">
+  <div class="site-footer__in">
+    <a class="fname" href="../index.html">Skill4Future</a>
+    <span>Allgemeine Information, keine Anlage-, Steuer- oder Rechtsberatung. Stand: Oktober 2026.</span>
+  </div>
 </footer>
+
+<script src="../assets/menu.js"></script>
 <script src="../assets/page.js"></script>
 </body>
 </html>

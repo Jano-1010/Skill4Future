@@ -2,315 +2,91 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Skill4Future</title>
 <meta name="description" content="Skill4Future: Wissensnetz zu Versicherung, Vorsorge, Investition und Vermögensallokation in der Schweiz.">
-<meta name="color-scheme" content="dark">
-<style>
-  :root{
-    --primary:#164782;
-    --primary-bright:#2874d4;
-    --accent:#6aaeff;
-    --bg:#0d1117;
-    --bg-soft:#0f1520;
-    --surface:#111827;
-    --surface-2:#1a2438;
-    --border:rgba(22,71,130,0.4);
-    --border-strong:rgba(40,116,212,0.5);
-    --text:#e8edf5;
-    --text-muted:#8a9bb5;
-    --text-faint:#5d6c86;
-    --c-versicherung:#3d7dc9; --c-versicherung-a:#1a3a6e; --c-versicherung-b:#164782;
-    --c-vorsorge:#2874d4;     --c-vorsorge-a:#164782;     --c-vorsorge-b:#2874d4;
-    --c-investition:#6aaeff;  --c-investition-a:#2874d4;  --c-investition-b:#6aaeff;
-    --c-allokation:#3cc4e8;   --c-allokation-a:#0e5a8a;   --c-allokation-b:#3cc4e8;
-  }
-  *{box-sizing:border-box;}
-  html,body{margin:0;padding:0;}
-  body{background:var(--bg);color:var(--text);font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;min-height:100vh;}
-  h1,h2{text-wrap:balance;margin:0;}
-  p{margin:0;}
-  a{color:var(--accent);}
-  button{font-family:inherit;cursor:pointer;}
-  button:focus-visible,a:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:3px;}
-
-  .app{min-height:100vh;display:flex;flex-direction:column;}
-  .topbar{display:flex;align-items:center;gap:18px;padding:16px clamp(16px,4vw,40px);border-bottom:1px solid var(--border);background:var(--bg-soft);position:sticky;top:0;z-index:20;}
-  .logo{font-size:22px;font-weight:800;color:#fff;background:none;border:none;padding:0;flex-shrink:0;}
-  .logo span{color:var(--accent);}
-  .crumbs{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--text-muted);min-width:0;overflow:hidden;}
-  .crumbs button{background:none;border:none;color:var(--text-muted);font-size:13px;padding:2px 4px;border-radius:6px;white-space:nowrap;}
-  .crumbs button:hover{color:#fff;}
-  .crumbs .sep{color:var(--text-faint);}
-  .crumbs .current{color:#fff;font-weight:600;white-space:nowrap;}
-
-  #view{flex:1;transform-origin:var(--tx,50%) var(--ty,50%);transition:transform .3s cubic-bezier(.2,.8,.2,1),opacity .3s ease;}
-  #view.out{transform:scale(1.16);opacity:0;}
-  #view.in-start{transform:scale(.86);opacity:0;}
-
-  .home-wrap{display:flex;flex-direction:column;align-items:center;padding:clamp(20px,4vw,48px) 20px 32px;gap:16px;}
-  .home-top{width:100%;max-width:560px;margin:0 auto;}
-  .back-btn{display:inline-flex;align-items:center;gap:6px;background:var(--surface);border:1px solid var(--border);color:var(--text-muted);padding:9px 18px;border-radius:20px;font-size:13.5px;margin-bottom:12px;}
-  .back-btn:hover{color:#fff;border-color:var(--border-strong);}
-  .home-intro{text-align:center;max-width:540px;margin-bottom:6px;}
-  .eyebrow{display:block;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:8px;font-weight:700;}
-  .home-intro h1{font-size:clamp(26px,4vw,38px);font-weight:800;color:#fff;margin-bottom:10px;}
-  .home-intro p{color:var(--text-muted);font-size:15px;line-height:1.6;}
-  .stage{width:min(90vw,64vh,620px);aspect-ratio:1/1;perspective:1400px;}
-  .stage-inner{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform .25s ease-out;}
-  #linesSvg{position:absolute;inset:0;width:100%;height:100%;overflow:visible;}
-  #netLayer{position:absolute;inset:0;}
-  .net-node{position:absolute;top:0;left:0;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:8px;background:none;border:none;padding:0;color:var(--text);}
-  .net-node .dot{border-radius:50%;background:var(--surface);border:2px solid var(--cat);transition:transform .2s ease,box-shadow .2s ease;}
-  .net-node:hover .dot,.net-node:focus-visible .dot{transform:scale(1.1);box-shadow:0 0 26px var(--cat);}
-  .net-node .lbl{font-size:13px;font-weight:700;color:#fff;white-space:nowrap;}
-  .net-node.cn-center{cursor:default;}
-  .net-node.cn-center .dot{width:clamp(64px,10vw,92px);height:clamp(64px,10vw,92px);background:linear-gradient(135deg,var(--cat-a,var(--cat)),var(--cat-b,var(--cat)));border-color:var(--cat);}
-  .net-node.cn-center.is-root .dot{background:radial-gradient(circle at 35% 30%,#fff,var(--accent) 70%);border-color:var(--accent);box-shadow:0 0 30px rgba(106,174,255,.45);}
-  .net-node.cn-center .lbl{font-size:clamp(14px,1.8vw,17px);}
-  .net-node.cn-sat .dot{width:clamp(46px,6.6vw,64px);height:clamp(46px,6.6vw,64px);background:linear-gradient(135deg,var(--cat-a),var(--cat-b));}
-  .hint{font-size:12.5px;color:var(--text-faint);text-align:center;min-height:1em;}
-
-  .all{width:100%;max-width:900px;margin-top:20px;border-top:1px solid var(--border);padding-top:18px;}
-  .all summary{cursor:pointer;color:var(--text-muted);font-size:14px;font-weight:600;list-style:none;}
-  .all summary::-webkit-details-marker{display:none;}
-  .all summary::before{content:'+ ';color:var(--accent);}
-  .all[open] summary::before{content:'– ';}
-  .all-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:24px;margin-top:18px;}
-  .all h2{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--cat);margin-bottom:10px;}
-  .all ul{list-style:none;margin:0;padding:0;}
-  .all li{margin-bottom:6px;}
-  .all a{color:var(--text);text-decoration:none;font-size:14px;}
-  .all a:hover{color:var(--accent);text-decoration:underline;}
-
-  .foot{border-top:1px solid var(--border);padding:22px clamp(16px,4vw,40px) 36px;text-align:center;font-size:12.5px;color:var(--text-faint);}
-
-  @media (prefers-reduced-motion:reduce){#view,.stage-inner,.net-node .dot{transition:none;}}
-</style>
+<link rel="icon" href="assets/logo.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=League+Spartan:wght@600;700&family=Lora:wght@400;600&display=swap">
+<link rel="stylesheet" href="assets/site.css">
+<link rel="stylesheet" href="assets/index.css">
 </head>
 <body>
-<div class="app">
-  <header class="topbar">
-    <button class="logo" id="logoBtn" type="button">Skill<span>4</span>Future</button>
-    <nav class="crumbs" id="crumbs" aria-label="Pfad"></nav>
-  </header>
-  <div id="view"></div>
-  <footer class="foot">Allgemeine Information, keine Anlage-, Steuer- oder Rechtsberatung. Kompetenzen fürs Leben.</footer>
-</div>
+
+<header class="site-header">
+  <div class="site-header__in">
+    <a class="brand" href="index.html">
+      <img src="assets/logo.jpg" alt="" width="44" height="44">
+      <span>Skill4Future</span>
+    </a>
+    <div class="menu-wrap">
+      <button class="burger" id="menuBtn" type="button" aria-label="Menü" aria-expanded="false" aria-controls="menuPanel"><i></i><i></i><i></i></button>
+      <div class="menu" id="menuPanel" hidden>
+        <a class="m-login" href="#">Login</a>
+        <a class="m-reg" href="#">Registrieren</a>
+        <a class="m-link" href="#">Über uns</a>
+        <a class="m-link" href="#">Kontakt</a>
+        <a class="m-link" href="#">Mein Profil</a>
+        <a class="m-link" href="#">Einstellungen</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="page-main">
+  <section class="hero">
+    <span class="badge">Kompetenzen fürs Leben</span>
+    <p class="lead">Dein persönliches Wissensnetz für Versicherung, Vorsorge, Investition und Vermögensallokation in der Schweiz.</p>
+    <div class="cross-wrap">
+      <div class="cross" id="cross">
+        <svg class="net" id="net" viewBox="-35 -35 170 170" aria-hidden="true"></svg>
+        <svg class="rings" viewBox="0 0 100 100" aria-hidden="true">
+          <circle cx="50" cy="50" r="44" fill="#EAF0F8" opacity=".55"></circle>
+          <circle cx="50" cy="50" r="30" fill="#EAF0F8"></circle>
+          <circle cx="50" cy="50" r="37" fill="none" stroke="#CBD9EC" stroke-width=".25"></circle>
+          <line x1="50" y1="16" x2="50" y2="84" stroke="#9DB6D9" stroke-width=".5" stroke-linecap="round"></line>
+          <line x1="16" y1="50" x2="84" y2="50" stroke="#9DB6D9" stroke-width=".5" stroke-linecap="round"></line>
+          <circle cx="50" cy="31" r=".9" fill="#4FA3E0"></circle>
+          <circle cx="50" cy="69" r=".9" fill="#4FA3E0"></circle>
+          <circle cx="31" cy="50" r=".9" fill="#4FA3E0"></circle>
+          <circle cx="69" cy="50" r=".9" fill="#4FA3E0"></circle>
+        </svg>
+        <div class="logo-c"><img src="assets/logo.jpg" alt="Skill4Future"></div>
+      </div>
+    </div>
+    <span class="hint">Klicke auf einen Bereich, um einzutauchen.</span>
+  </section>
+
+  <section id="bereiche" class="areas">
+    <div class="areas__in">
+      <div class="areas__head">
+        <div class="areas__intro">
+          <span class="kicker" id="kicker"></span>
+          <h2 id="areaName"></h2>
+          <p class="areas__lead" id="areaLead"></p>
+        </div>
+        <div class="tabs" id="tabs" role="group" aria-label="Bereich wählen"></div>
+      </div>
+      <div class="topics" id="topics"></div>
+    </div>
+  </section>
+
+  <section id="alle" class="all">
+    <h2>Alle Themen auf einen Blick</h2>
+    <div class="all__grid" id="allGrid"></div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="site-footer__in">
+    <span class="fname">Skill4Future</span>
+    <span>Allgemeine Information, keine Anlage-, Steuer- oder Rechtsberatung.</span>
+  </div>
+</footer>
 
 <script src="assets/nodes.js"></script>
-<script>
-(function(){
-  "use strict";
-
-  var ROOT_ID = "hub";
-  var CATS = {
-    hub:          { solid:"#6aaeff" },
-    versicherung: { solid:"var(--c-versicherung)", a:"var(--c-versicherung-a)", b:"var(--c-versicherung-b)" },
-    vorsorge:     { solid:"var(--c-vorsorge)",     a:"var(--c-vorsorge-a)",     b:"var(--c-vorsorge-b)" },
-    investition:  { solid:"var(--c-investition)",  a:"var(--c-investition-a)",  b:"var(--c-investition-b)" },
-    allokation:   { solid:"var(--c-allokation)",   a:"var(--c-allokation-a)",   b:"var(--c-allokation-b)" }
-  };
-
-  var nodesMap = new Map();
-  (window.S4F_NODES || []).forEach(function(n){ nodesMap.set(n.id, n); });
-
-  var view = document.getElementById("view");
-  var crumbsEl = document.getElementById("crumbs");
-  var logoBtn = document.getElementById("logoBtn");
-  var currentId = ROOT_ID;
-  var reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-  function esc(s){
-    return String(s == null ? "" : s).replace(/[&<>"']/g, function(c){
-      return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];
-    });
-  }
-  function children(id){
-    var out = [];
-    nodesMap.forEach(function(n){ if(n.parent === id) out.push(n); });
-    out.sort(function(a,b){ return (a.order||0)-(b.order||0) || a.id.localeCompare(b.id); });
-    return out;
-  }
-  function ancestors(id){
-    var chain = [], cur = nodesMap.get(id);
-    while(cur){ chain.unshift(cur); cur = cur.parent ? nodesMap.get(cur.parent) : null; }
-    return chain;
-  }
-  function catInfo(n){ return CATS[n.category] || CATS.hub; }
-
-  function setOrigin(el){
-    var x = "50%", y = "50%";
-    if(el){
-      var r = el.getBoundingClientRect(), vr = view.getBoundingClientRect();
-      x = ((r.left + r.width/2 - vr.left) / vr.width * 100) + "%";
-      y = ((r.top + r.height/2 - vr.top) / vr.height * 100) + "%";
-    }
-    view.style.setProperty("--tx", x);
-    view.style.setProperty("--ty", y);
-  }
-
-  function navigateTo(id, originEl){
-    var n = nodesMap.get(id);
-    if(!n) return;
-    setOrigin(originEl);
-    var isLeaf = children(id).length === 0;
-
-    if(isLeaf && n.page){
-      if(reduceMotion){ location.href = n.page; return; }
-      view.classList.add("out");
-      setTimeout(function(){ location.href = n.page; }, 240);
-      return;
-    }
-
-    function swap(){
-      currentId = id;
-      history.pushState({ id:id }, "", "#" + id);
-      render();
-    }
-    if(reduceMotion){ swap(); return; }
-    view.classList.add("out");
-    setTimeout(function(){
-      swap();
-      view.classList.remove("out");
-      view.classList.add("in-start");
-      requestAnimationFrame(function(){ requestAnimationFrame(function(){ view.classList.remove("in-start"); }); });
-    }, 240);
-  }
-
-  window.addEventListener("popstate", function(e){
-    var id = (e.state && e.state.id) || (location.hash || "").slice(1) || ROOT_ID;
-    currentId = nodesMap.has(id) && children(id).length ? id : ROOT_ID;
-    render();
-  });
-  window.addEventListener("pageshow", function(e){
-    if(e.persisted){ view.classList.remove("out"); }
-  });
-  logoBtn.addEventListener("click", function(){ if(currentId !== ROOT_ID) navigateTo(ROOT_ID, logoBtn); });
-
-  function renderCrumbs(){
-    var chain = ancestors(currentId);
-    crumbsEl.innerHTML = "";
-    if(chain.length <= 1) return;
-    chain.forEach(function(n, i){
-      if(i > 0){
-        var sep = document.createElement("span");
-        sep.className = "sep"; sep.textContent = "/";
-        crumbsEl.appendChild(sep);
-      }
-      if(i === chain.length - 1){
-        var cur = document.createElement("span");
-        cur.className = "current"; cur.textContent = n.short || n.label;
-        crumbsEl.appendChild(cur);
-      } else {
-        var b = document.createElement("button");
-        b.type = "button"; b.textContent = n.id === ROOT_ID ? "Start" : (n.short || n.label);
-        b.addEventListener("click", function(){ navigateTo(n.id, b); });
-        crumbsEl.appendChild(b);
-      }
-    });
-  }
-
-  function allTopicsHtml(){
-    var html = '<details class="all"><summary>Alle Themen auf einen Blick</summary><div class="all-grid">';
-    children(ROOT_ID).forEach(function(b){
-      var c = catInfo(b);
-      html += '<div style="--cat:'+c.solid+'"><h2>'+esc(b.label)+'</h2><ul>';
-      children(b.id).forEach(function(t){
-        html += '<li><a href="'+esc(t.page)+'">'+esc(t.icon)+' '+esc(t.short || t.label)+'</a></li>';
-      });
-      html += '</ul></div>';
-    });
-    return html + '</div></details>';
-  }
-
-  function render(){
-    renderCrumbs();
-    var center = nodesMap.get(currentId);
-    var sats = children(currentId);
-    var isRoot = currentId === ROOT_ID;
-    var eyebrow = isRoot ? "Kompetenzen fürs Leben" : "Bereich";
-    var svgns = "http://www.w3.org/2000/svg";
-    document.title = isRoot ? "Skill4Future" : center.label + " – Skill4Future";
-
-    view.innerHTML =
-      '<div class="home-wrap">' +
-        (isRoot ? '' : '<div class="home-top"><button type="button" class="back-btn" id="backBtn">← Zurück</button></div>') +
-        '<div class="home-intro"><span class="eyebrow">'+esc(eyebrow)+'</span>' +
-          '<h1>'+esc(center.icon ? center.icon + " " : "")+esc(center.label)+'</h1>' +
-          '<p>'+esc(center.description || "")+'</p></div>' +
-        '<div class="stage" id="stage"><div class="stage-inner" id="stageInner">' +
-          '<svg id="linesSvg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet"></svg>' +
-          '<div id="netLayer"></div></div></div>' +
-        '<p class="hint">'+(isRoot ? "Klicke auf einen Bereich, um einzutauchen." : "Klicke auf ein Thema, um die Seite zu öffnen.")+'</p>' +
-        (isRoot ? allTopicsHtml() : '') +
-      '</div>';
-
-    var back = document.getElementById("backBtn");
-    if(back) back.addEventListener("click", function(){ navigateTo(center.parent || ROOT_ID, back); });
-
-    var svg = document.getElementById("linesSvg");
-    var layer = document.getElementById("netLayer");
-    var pos = {};
-    sats.forEach(function(s, i){
-      var rad = (i * (360 / sats.length)) * Math.PI / 180;
-      pos[s.id] = { x: 50 + 34 * Math.sin(rad), y: 50 - 34 * Math.cos(rad) };
-    });
-
-    sats.forEach(function(s){
-      var line = document.createElementNS(svgns, "path");
-      line.setAttribute("d", "M 50 50 L " + pos[s.id].x + " " + pos[s.id].y);
-      line.setAttribute("stroke", catInfo(s).solid);
-      line.setAttribute("stroke-width", "0.4");
-      line.setAttribute("opacity", "0.5");
-      svg.appendChild(line);
-    });
-
-    var cc = catInfo(center);
-    var centerEl = document.createElement("div");
-    centerEl.className = "net-node cn-center" + (isRoot ? " is-root" : "");
-    centerEl.style.left = "50%"; centerEl.style.top = "50%";
-    centerEl.style.setProperty("--cat", cc.solid);
-    if(cc.a){ centerEl.style.setProperty("--cat-a", cc.a); centerEl.style.setProperty("--cat-b", cc.b); }
-    centerEl.innerHTML = '<span class="dot"></span><span class="lbl">'+esc(center.icon || "")+' '+esc(center.short || center.label)+'</span>';
-    layer.appendChild(centerEl);
-
-    sats.forEach(function(s){
-      var c = catInfo(s);
-      var btn = document.createElement("button");
-      btn.type = "button"; btn.className = "net-node cn-sat";
-      btn.style.left = pos[s.id].x + "%"; btn.style.top = pos[s.id].y + "%";
-      btn.style.setProperty("--cat", c.solid);
-      btn.style.setProperty("--cat-a", c.a);
-      btn.style.setProperty("--cat-b", c.b);
-      btn.setAttribute("aria-label", s.label);
-      btn.innerHTML = '<span class="dot"></span><span class="lbl">'+esc(s.icon || "")+' '+esc(s.short || s.label)+'</span>';
-      btn.addEventListener("click", function(){ navigateTo(s.id, btn); });
-      layer.appendChild(btn);
-    });
-
-    if(!reduceMotion){
-      var stage = document.getElementById("stage");
-      var inner = document.getElementById("stageInner");
-      stage.addEventListener("mousemove", function(e){
-        var r = stage.getBoundingClientRect();
-        var px = (e.clientX - r.left) / r.width - 0.5;
-        var py = (e.clientY - r.top) / r.height - 0.5;
-        inner.style.transform = "rotateY("+(px*10)+"deg) rotateX("+(-py*10)+"deg)";
-      });
-      stage.addEventListener("mouseleave", function(){ inner.style.transform = "rotateY(0) rotateX(0)"; });
-    }
-  }
-
-  var start = (location.hash || "").slice(1);
-  if(start && nodesMap.has(start)){
-    var sn = nodesMap.get(start);
-    if(children(start).length){ currentId = start; }
-    else if(sn.page){ location.replace(sn.page); return; }
-  }
-  history.replaceState({ id: currentId }, "", "#" + currentId);
-  render();
-})();
-</script>
+<script src="assets/menu.js"></script>
+<script src="assets/index.js"></script>
 </body>
 </html>

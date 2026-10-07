@@ -3,7 +3,7 @@
     "label": "Skill4Future",
     "short": "Skill4Future",
     "icon": "🧭",
-    "description": "Dein persönliches Wissensnetz für Versicherung, Vorsorge, Investition und Vermögensallokation in der Schweiz. Wähle einen Bereich und öffne die Themen, die für dein Leben relevant sind."
+    "description": "Dein persönliches Wissensnetz für Versicherung, Vorsorge, Investition und Vermögensallokation in der Schweiz."
   },
   "bereiche": [
     {
@@ -12,7 +12,7 @@
       "short": "Versicherung",
       "icon": "🛡️",
       "order": 0,
-      "description": "Versicherungen schützen dich vor den finanziellen Folgen von Unfällen, Krankheit oder Schäden. In der Schweiz sind einige obligatorisch (Krankenkasse, Unfallversicherung), andere freiwillig, aber sinnvoll (Haftpflicht, Hausrat)."
+      "description": "Welche Risiken musst du absichern – und wo zahlst du zu viel? Die wichtigsten Versicherungen in der Schweiz verständlich erklärt."
     },
     {
       "id": "vorsorge",
@@ -20,7 +20,7 @@
       "short": "Vorsorge",
       "icon": "🏛️",
       "order": 1,
-      "description": "Die Altersvorsorge in der Schweiz ruht auf drei Säulen: staatliche AHV, berufliche Pensionskasse und private Vorsorge. Je früher du das System verstehst, desto gezielter kannst du Lücken schliessen."
+      "description": "Das Drei-Säulen-System der Schweiz – und wie du heute für morgen vorsorgst."
     },
     {
       "id": "investition",
@@ -28,7 +28,7 @@
       "short": "Investition",
       "icon": "📈",
       "order": 2,
-      "description": "Investieren lässt dein Geld für dich arbeiten, statt nur auf dem Sparkonto zu liegen. Wichtig sind Anlagehorizont, Risikofähigkeit und Streuung, nicht das schnelle Geld."
+      "description": "Geld anlegen ohne Fachchinesisch: Grundlagen, Produkte und Kosten."
     },
     {
       "id": "allokation",
@@ -36,7 +36,7 @@
       "short": "Allokation",
       "icon": "🧩",
       "order": 3,
-      "description": "Die Vermögensallokation legt fest, wie du dein Vermögen auf verschiedene Anlageklassen verteilst, zum Beispiel Liquidität, Obligationen, Aktien und Immobilien. Diese Aufteilung bestimmt langfristig stärker über Rendite und Schwankungen als die Wahl einzelner Titel."
+      "description": "Wie du dein Vermögen sinnvoll aufteilst – passend zu Zielen, Zeit und Risiko."
     }
   ]
 }
