@@ -25,7 +25,7 @@ Website: https://jano-1010.github.io/Skill4Future/
 | `build.ps1` | Erzeugt `themen/*.html` und `assets/nodes.js` aus `content/` |
 
 ### Design
-Das Design stammt aus dem Claude-Design-Handoff (Logo-Blau `#164782`, Akzent Himmelblau `#4FA3E0`, Schriften League Spartan, Cormorant Garamond und Lora). Die Farben stehen als Variablen oben in `assets/site.css`. Himmelblau wird nie als Textfarbe auf Weiss verwendet, dafür gilt `#1F5F8F`.
+Das Design stammt aus dem Claude-Design-Handoff (Logo-Blau `#164782`, Akzent Himmelblau `#4FA3E0`, Schriften League Spartan und Source Sans 3). Die Farben stehen als Variablen oben in `assets/site.css`. Himmelblau wird nie als Textfarbe auf Weiss verwendet, dafür gilt `#1F5F8F`.
 
 Die Menüpunkte im Burger-Menü (Login, Registrieren, Über uns, Kontakt, Mein Profil, Einstellungen) sind Platzhalter ohne Zielseite.
 

@@ -14,8 +14,8 @@
   --s4f-linie:#DDE3EB;
   --s4f-grau:#5A6474;
   --s4f-text:#0F1B2D;
-  --font-heading:'Cormorant Garamond',Georgia,'Times New Roman',serif;
-  --font-body:'Lora',Georgia,'Times New Roman',serif;
+  --font-heading:'League Spartan','Segoe UI',Arial,sans-serif;
+  --font-body:'Source Sans 3','Segoe UI',Arial,sans-serif;
   --font-label:'League Spartan','Segoe UI',Arial,sans-serif;
 }
 *{box-sizing:border-box;}
