@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Über uns – Skill4Future</title>
+<meta name="description" content="Warum es Skill4Future gibt: Kompetenzen fürs Leben rund um Versicherung, Vorsorge, Investition und Vermögensallokation in der Schweiz.">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="assets/favicon-192.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@500;600;700&family=Source+Sans+3:wght@400;600&display=swap">
+<link rel="stylesheet" href="assets/site.css?v=4">
+<link rel="stylesheet" href="assets/about.css?v=4">
+<script src="assets/theme.js?v=4"></script>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="site-header__in">
+    <a class="brand" href="index.html">
+      <img src="assets/logo-round.png" alt="" width="44" height="44">
+      <span>Skill4Future</span>
+    </a>
+    <div class="menu-wrap">
+      <button class="burger" id="menuBtn" type="button" aria-label="Menü" aria-expanded="false" aria-controls="menuPanel"><i></i><i></i><i></i></button>
+      <div class="menu" id="menuPanel" hidden>
+        <a class="m-login" href="#">Login</a>
+        <a class="m-reg" href="#">Registrieren</a>
+        <a class="m-link" href="ueber-uns.html">Über uns</a>
+        <a class="m-link" href="#">Kontakt</a>
+        <a class="m-link" href="#">Mein Profil</a>
+        <a class="m-link" href="#">Einstellungen</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="about">
+
+  <!-- Hero mit Kompass -->
+  <section class="ab-hero">
+    <div class="ab-hero__text">
+      <span class="badge">Über uns</span>
+      <h1>Geld ist kein Fach.<br><em>Es ist Lebenskompetenz.</em></h1>
+      <p class="ab-lead">In der Schule lernst du Gleichungen, aber nicht, wie eine Pensionskasse funktioniert. Skill4Future füllt diese Lücke: verständlich, ohne Fachchinesisch, mit Zahlen, die du selbst durchrechnen kannst.</p>
+      <div class="ab-cta">
+        <a class="btn" href="index.html#bereiche">Wissensnetz erkunden</a>
+        <a class="btn btn--ghost" href="#warum">Warum wir das machen</a>
+      </div>
+    </div>
+    <div class="ab-hero__art" aria-hidden="true">
+      <svg viewBox="0 0 200 200" class="compass">
+        <circle cx="100" cy="100" r="92" class="c-bg"></circle>
+        <circle cx="100" cy="100" r="70" class="c-ring" fill="none"></circle>
+        <circle cx="100" cy="100" r="48" class="c-ring" fill="none" stroke-dasharray="2 4"></circle>
+        <g class="needle"><path d="M100 18 L108 100 L100 92 L92 100 Z" class="n-up"></path><path d="M100 182 L108 100 L100 108 L92 100 Z" class="n-down"></path></g>
+        <circle cx="100" cy="100" r="6" class="c-hub"></circle>
+        <g class="dots"><circle cx="100" cy="8" r="5"></circle><circle cx="192" cy="100" r="5"></circle><circle cx="100" cy="192" r="5"></circle><circle cx="8" cy="100" r="5"></circle></g>
+      </svg>
+      <span class="pt pt--n">Versicherung</span>
+      <span class="pt pt--e">Vorsorge</span>
+      <span class="pt pt--s">Investition</span>
+      <span class="pt pt--w">Allokation</span>
+    </div>
+  </section>
+
+  <!-- Zahlen -->
+  <section class="ab-stats" aria-label="Skill4Future in Zahlen">
+    <div class="ab-stats__in">
+      <div class="stat"><strong data-count="4">4</strong><span>Bereiche</span></div>
+      <div class="stat"><strong data-count="28">28</strong><span>Themenseiten</span></div>
+      <div class="stat"><strong data-count="28">28</strong><span>Rechner zum Selbstausprobieren</span></div>
+      <div class="stat"><strong>0</strong><span>Produkte, die wir dir verkaufen</span></div>
+    </div>
+  </section>
+
+  <!-- Warum -->
+  <section class="ab-section" id="warum">
+    <div class="ab-section__in ab-split">
+      <div>
+        <p class="kicker">Warum es uns gibt</p>
+        <h2>Die wichtigsten Entscheide triffst du, bevor du sie verstehst.</h2>
+      </div>
+      <div class="ab-prose">
+        <p>Die Krankenkasse wählen, in die 3. Säule einzahlen, eine Wohnung kaufen: Das passiert meist mit Anfang zwanzig oder dreissig, und selten hat dir jemand erklärt, worauf es ankommt. Wer dann auf Prospekte und Verkaufsgespräche angewiesen ist, zahlt oft drauf.</p>
+        <p>Wir glauben, dass ein gutes Gespräch über Geld mit einer einfachen Frage beginnt: <strong>Was bedeutet das für mein Leben?</strong> Darum erklären wir zuerst, wie die Schweiz funktioniert, und lassen dich dann mit deinen eigenen Zahlen nachrechnen.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Prinzipien -->
+  <section class="ab-section ab-section--tint">
+    <div class="ab-section__in">
+      <p class="kicker">Unser Kompass</p>
+      <h2>Vier Grundsätze, die jede Seite prägen</h2>
+      <div class="ab-grid">
+        <article class="pr">
+          <span class="pr__ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v3M12 18v3M3 12h3M18 12h3"></path><circle cx="12" cy="12" r="4"></circle></svg></span>
+          <h3>Klar statt kompliziert</h3>
+          <p>Ein Begriff pro Gedanke. Wenn wir ihn nicht in einem Satz erklären können, überarbeiten wir die Seite.</p>
+        </article>
+        <article class="pr">
+          <span class="pr__ic"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2"></rect><path d="M8 7h8M8 12h2M12 12h2M16 12h0M8 16h2M12 16h2M16 16h0"></path></svg></span>
+          <h3>Rechnen statt glauben</h3>
+          <p>Jedes Beispiel ist ein Rechner. Ändere die Zahlen und sieh sofort, was sich verändert.</p>
+        </article>
+        <article class="pr">
+          <span class="pr__ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 4 6v6c0 4.5 3.2 7.8 8 9 4.8-1.2 8-4.5 8-9V6z"></path><path d="m9 12 2 2 4-4"></path></svg></span>
+          <h3>Unabhängig</h3>
+          <p>Wir verkaufen keine Versicherung, keinen Fonds und keine Vorsorgelösung. Das Wissen soll dir gehören.</p>
+        </article>
+        <article class="pr">
+          <span class="pr__ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-8M22 20H2"></path></svg></span>
+          <h3>Ehrlich bei Grenzen</h3>
+          <p>Zahlen ändern sich jedes Jahr, und deine Lage ist einzigartig. Darum stehen Stand und Quellen auf jeder Seite.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Lebensreise -->
+  <section class="ab-section">
+    <div class="ab-section__in">
+      <p class="kicker">Für jede Lebensphase</p>
+      <h2>Deine Reise, unsere Stationen</h2>
+      <ol class="journey">
+        <li style="--d:0">
+          <span class="j-age">20er</span>
+          <h3>Erster Lohn</h3>
+          <p>Notgroschen aufbauen, Krankenkasse und Franchise wählen, Haftpflicht abschliessen.</p>
+          <a href="themen/sparkonto.html">Sparkonto und Notgroschen</a>
+        </li>
+        <li style="--d:1">
+          <span class="j-age">30er</span>
+          <h3>Eigene Wohnung, Familie</h3>
+          <p>Säule 3a nutzen, Tragbarkeit prüfen, Risiken absichern.</p>
+          <a href="themen/immobilien.html">Immobilien</a>
+        </li>
+        <li style="--d:2">
+          <span class="j-age">40er</span>
+          <h3>Vermögen aufbauen</h3>
+          <p>Zinseszins nutzen, Anlagen streuen und Kosten im Blick behalten.</p>
+          <a href="themen/zinseszins.html">Zinseszins</a>
+        </li>
+        <li style="--d:3">
+          <span class="j-age">50er</span>
+          <h3>Lücken schliessen</h3>
+          <p>Vorsorgeausweis lesen, Einkäufe prüfen, die Vorsorgelücke ausrechnen.</p>
+          <a href="themen/vorsorgeluecke.html">Vorsorgelücke</a>
+        </li>
+        <li style="--d:4">
+          <span class="j-age">60+</span>
+          <h3>Pensionierung</h3>
+          <p>Renten verstehen, Risiko anpassen und das Vermögen neu ausrichten.</p>
+          <a href="themen/rebalancing.html">Rebalancing</a>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- So arbeiten wir -->
+  <section class="ab-section ab-section--tint">
+    <div class="ab-section__in">
+      <p class="kicker">So ist jede Seite aufgebaut</p>
+      <h2>Verstehen, rechnen, prüfen, handeln</h2>
+      <div class="steps">
+        <div class="step"><b>1</b><h3>Auf einen Blick</h3><p>Das Wichtigste in drei Stichpunkten.</p></div>
+        <div class="step"><b>2</b><h3>Rechner</h3><p>Dein Beispiel mit deinen Zahlen.</p></div>
+        <div class="step"><b>3</b><h3>Häufige Fehler</h3><p>Was andere falsch machen, musst du nicht wiederholen.</p></div>
+        <div class="step"><b>4</b><h3>Checkliste</h3><p>Hake ab, was du erledigt hast. Wir merken es uns in deinem Browser.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Abschluss -->
+  <section class="ab-end">
+    <div class="ab-end__in">
+      <h2>Der beste Moment zum Anfangen war gestern. Der zweitbeste ist jetzt.</h2>
+      <p>Starte mit dem Notgroschen oder such dir den Bereich aus, der dich gerade am meisten beschäftigt.</p>
+      <div class="ab-cta ab-cta--center">
+        <a class="btn btn--light" href="themen/sparkonto.html">Mit dem Notgroschen starten</a>
+        <a class="btn btn--outline-light" href="index.html#bereiche">Alle Bereiche ansehen</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="site-footer__in">
+    <a class="fname" href="index.html">Skill4Future</a>
+    <span>Allgemeine Information, keine Anlage-, Steuer- oder Rechtsberatung.</span>
+  </div>
+</footer>
+
+<script src="assets/menu.js?v=4"></script>
+<script src="assets/about.js?v=4"></script>
+</body>
+</html>
