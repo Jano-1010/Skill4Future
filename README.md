@@ -18,6 +18,7 @@ Website: https://jano-1010.github.io/Skill4Future/
 | `assets/index.css`, `assets/index.js` | Startseite: Kreuz, Hintergrundnetz, Bereichsabschnitt |
 | `assets/page.css`, `assets/page.js` | Themenseiten: Gestaltung und abhakbare Checkliste |
 | `assets/theme.js` | Dunkelmodus-Schalter oben rechts (Wahl wird im Browser gemerkt, sonst gilt die Systemeinstellung); Farben für Dunkel stehen in `assets/site.css` unter `html[data-theme="dark"]` |
+| `ueber-uns.html`, `assets/about.css`, `assets/about.js` | Über-uns-Seite (von Hand gepflegt, nicht generiert); im Burger-Menü verlinkt |
 | `assets/rechner.js` | Interaktive Rechner im Abschnitt „Beispiel“ jeder Themenseite (pro Thema-ID definiert, Startwerte entsprechen dem Beispiel) |
 | `assets/logo-round.png`, `assets/favicon-*.png`, `assets/apple-touch-icon.png` | Rundes Logo mit transparentem Rand (Seite, Browser-Tab, Handy-Startbildschirm) |
 | `content/bereiche.json` | Die vier Bereiche und der Einleitungstext der Startseite |
