@@ -47,21 +47,24 @@
     function P(r, deg) { var a = deg * Math.PI / 180; return [50 + r * Math.cos(a), 50 + r * Math.sin(a)]; }
     function f(v) { return +v.toFixed(2); }
     var lines = [], dots = [];
+    var cs = getComputedStyle(document.documentElement);
+    function v(n) { return cs.getPropertyValue(n).trim(); }
+    var C1 = v("--s4f-blau-300"), C2 = v("--s4f-blau-200"), C3 = v("--s4f-linie"), SURF = v("--s4f-flaeche");
     ANGLES.slice(0, areas.length).forEach(function (A, i) {
-      var on = i === active, lc = on ? "#9DB6D9" : "#CBD9EC", p = P(36, A), kidsPts = [];
+      var on = i === active, lc = on ? C1 : C2, p = P(36, A), kidsPts = [];
       for (var k = 0; k < 6; k++) {
         var a = A - 50 + k * 20 + (rnd() - 0.5) * 8, r = 58 + rnd() * 10, q = P(r, a);
         kidsPts.push(q);
         lines.push([p[0], p[1], q[0], q[1], lc, on ? 0.35 : 0.25]);
-        dots.push([q[0], q[1], 1.7, "#fff", on ? ACCENT : "#9DB6D9"]);
+        dots.push([q[0], q[1], 1.7, SURF, on ? ACCENT : C1]);
         for (var g = 0; g < 2; g++) {
           var gp = P(r + 13 + rnd() * 8, a + (g ? 7 : -7) + (rnd() - 0.5) * 4);
-          lines.push([q[0], q[1], gp[0], gp[1], "#DDE3EB", 0.2]);
-          dots.push([gp[0], gp[1], 1, "#DDE3EB", "#CBD9EC"]);
+          lines.push([q[0], q[1], gp[0], gp[1], C3, 0.2]);
+          dots.push([gp[0], gp[1], 1, C3, C2]);
         }
       }
       for (var j = 0; j < kidsPts.length - 1; j++) {
-        lines.push([kidsPts[j][0], kidsPts[j][1], kidsPts[j + 1][0], kidsPts[j + 1][1], "#DDE3EB", 0.2]);
+        lines.push([kidsPts[j][0], kidsPts[j][1], kidsPts[j + 1][0], kidsPts[j + 1][1], C3, 0.2]);
       }
     });
     return lines.map(function (l) {
@@ -146,6 +149,7 @@
     return false;
   }
 
+  document.addEventListener("themechange", function () { netEl.innerHTML = buildNet(sel); });
   window.addEventListener("hashchange", fromHash);
   render();
   fromHash();
